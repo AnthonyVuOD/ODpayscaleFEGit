@@ -102,7 +102,7 @@ export function Header() {
                         >
                           <div className="space-y-4">
                             <MobileNavLink href="/">
-                              Mission
+                              Home
                             </MobileNavLink>
                             {/* <MobileNavLink href="/#faqs">
                               FAQs
