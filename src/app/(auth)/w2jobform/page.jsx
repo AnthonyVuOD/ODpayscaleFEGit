@@ -12,13 +12,61 @@
   }
   ```
 */
+'use client'
 import { Container } from '@/components/Container'
 import {UserCircleIcon, PhotoIcon } from '@heroicons/react/20/solid'
+import { useState } from 'react';
 
 export default function Example() {
+
+  const [formData, setFormData] = useState({
+    "optometristId":'2',
+    "year" : '',
+    "state" : 'Alabama',
+    "city": '',
+    "practiceMode": 'Private Practice',
+    "setting" : "Urban",
+    "paidDaysOff" : '',
+    "healthInsuranceValue" : '',
+    "otherBenefitsValue" : '',
+    "comments": '',
+    "annualSalaryAndBonus": '',
+    "weeklyHours": '',
+    "patientsPerWeek": ''
+  });
+
+  function onInputChange(e){
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  }
+
+  function createW2Job(e){
+    e.preventDefault();
+
+    fetch("http://localhost:8080/api/v1/w2jobs/createw2job",{
+      method:"POST",
+      headers: {
+        'Content-Type': 'application/json',
+        // Add any additional headers if needed
+      },
+      body: JSON.stringify(formData)})
+    
+    .then((response)=>response.text())
+    .then((responseText)=>{
+      console.log(responseText);
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+
+    console.log("Hello smello");
+  };
+
+
+
   return (
     <Container>
-    <form>
+    <form onSubmit={createW2Job}>
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
           {/* <p className="mt-1 text-sm leading-6 text-gray-600">
@@ -35,7 +83,7 @@ export default function Example() {
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
             <div className="sm:col-span-4">
-              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="year" className="block text-sm font-medium leading-6 text-gray-900">
                 Year
               </label>
               <div className="mt-2">
@@ -43,7 +91,8 @@ export default function Example() {
                   type="text"
                   name="year"
                   id="year"
-                  autoComplete="given-name"
+                  value={formData.year}
+                  onChange={onInputChange}
                   placeholder='XXXX'
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
@@ -51,14 +100,15 @@ export default function Example() {
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="state" className="block text-sm font-medium leading-6 text-gray-900">
                 State
               </label>
               <div className="mt-2">
                 <select
-                  id="country"
-                  name="country"
-                  autoComplete="country-name"
+                  id="state"
+                  name="state"
+                  value={formData.state}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
                   <option>Alabama</option>
@@ -111,13 +161,26 @@ export default function Example() {
                   <option>West Virginia</option>
                   <option>Wisconsin</option>
                   <option>Wyoming</option>
+                  <option>Alberta</option>
+                  <option>British Columbia</option>
+                  <option>Manitoba</option>
+                  <option>New Brunswick</option>
+                  <option>Newfoundland and Labrador</option>
+                  <option>Nova Scotia</option>
+                  <option>Ontario</option>
+                  <option>Prince Edward Island</option>
+                  <option>Quebec</option>
+                  <option>Saskatchewan</option>
+                  <option>Yukon</option>
+                  <option>Nunavut</option>
+                  <option>Northwest Territories</option>
                   <option>Other</option>
                 </select>
               </div>
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">
                 City
               </label>
               <div className="mt-2">
@@ -125,6 +188,8 @@ export default function Example() {
                   type="text"
                   name="city"
                   id="city"
+                  value={formData.city}
+                  onChange={onInputChange}
                   placeholder='Type here'
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
@@ -132,14 +197,15 @@ export default function Example() {
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="practiceMode" className="block text-sm font-medium leading-6 text-gray-900">
                 Practice mode:
               </label>
               <div className="mt-2">
                 <select
                   id="practiceMode"
                   name="practiceMode"
-                  autoComplete="country-name"
+                  value={formData.practiceMode}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
                   <option>Private Practice</option>
@@ -154,14 +220,15 @@ export default function Example() {
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="setting" className="block text-sm font-medium leading-6 text-gray-900">
                 Setting:
               </label>
               <div className="mt-2">
                 <select
                   id="setting"
                   name="setting"
-                  autoComplete="country-name"
+                  value={formData.setting}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
                   <option>Urban</option>
@@ -173,15 +240,16 @@ export default function Example() {
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="annualSalaryAndBonus" className="block text-sm font-medium leading-6 text-gray-900">
                 Annual salary(Including bonus):
               </label>
               <div className="mt-2">
                 <input
                   type="text"
-                  name="street-address"
-                  id="street-address"
-                  autoComplete="street-address"
+                  name="annualSalaryAndBonus"
+                  id="annualSalaryAndBonus"
+                  value={formData.annualSalaryAndBonus}
+                  onChange={onInputChange}
                   placeholder='XXX,XXX'
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
@@ -189,15 +257,16 @@ export default function Example() {
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="healthInsuranceValue" className="block text-sm font-medium leading-6 text-gray-900">
                 Employer annual contribution to healthcare (Estimate):
               </label>
               <div className="mt-2">
                 <input
                   type="text"
-                  name="street-address"
-                  id="street-address"
-                  autoComplete="street-address"
+                  name="healthInsuranceValue"
+                  id="healthInsuranceValue"
+                  value={formData.healthInsuranceValue}
+                  onChange={onInputChange}
                   placeholder='$'
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
@@ -205,15 +274,16 @@ export default function Example() {
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="otherBenefitsValue" className="block text-sm font-medium leading-6 text-gray-900">
                 Employer annual contribution to other benefits (Licensure, CE, insurance, etc.):
               </label>
               <div className="mt-2">
                 <input
                   type="text"
-                  name="street-address"
-                  id="street-address"
-                  autoComplete="street-address"
+                  name="otherBenefitsValue"
+                  id="otherBenefitsValue"
+                  value={formData.otherBenefitsValue}
+                  onChange={onInputChange}
                   placeholder='$'
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
@@ -221,52 +291,55 @@ export default function Example() {
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="paidDaysOff" className="block text-sm font-medium leading-6 text-gray-900">
                 Paid days off per year:
               </label>
               <div className="mt-2">
                 <input
                   type="text"
-                  name="street-address"
-                  id="street-address"
-                  autoComplete="street-address"
+                  name="paidDaysOff"
+                  id="paidDaysOff"
+                  value={formData.paidDaysOff}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="weeklyHours" className="block text-sm font-medium leading-6 text-gray-900">
                 Hours worked per week:
               </label>
               <div className="mt-2">
                 <input
                   type="text"
-                  name="street-address"
-                  id="street-address"
-                  autoComplete="street-address"
+                  name="weeklyHours"
+                  id="weeklyHours"
+                  value={formData.weeklyHours}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="patientsPerWeek" className="block text-sm font-medium leading-6 text-gray-900">
                 Patients seen per week:
               </label>
               <div className="mt-2">
                 <input
                   type="text"
-                  name="street-address"
-                  id="street-address"
-                  autoComplete="street-address"
+                  name="patientsPerWeek"
+                  id="patientsPerWeek"
+                  value={formData.patientsPerWeek}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div className="sm:col-span-5">
-              <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="comments" className="block text-sm font-medium leading-6 text-gray-900">
                 Comments:
               </label>
               <div className="mt-2">
@@ -274,8 +347,9 @@ export default function Example() {
                   id="comments"
                   name="comments"
                   rows={3}
+                  value={formData.comments}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
-                  defaultValue={''}
                   placeholder='Please include other salary details or leave this blank. Helpful information would include bonus structure, revenue collected, weekends, etc.'
                 />
               </div>

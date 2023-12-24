@@ -12,13 +12,63 @@
   }
   ```
 */
+'use client'
 import { Container } from '@/components/Container'
 import {UserCircleIcon, PhotoIcon } from '@heroicons/react/20/solid'
+import { useState } from 'react';
 
-export default function Example() {
+export default function ContractorJobForm() {
+
+  const [formData, setFormData] = useState({
+    "optometristId":'2',
+    "year" : '',
+    "state" : 'Alabama',
+    "city": '',
+    "practiceMode": 'Private Practice',
+    "setting" : "Urban",
+    "paidDaysOff" : '',
+    "healthInsuranceValue" : '',
+    "otherBenefitsValue" : '',
+    "comments": '',
+    "dailyRateAndBonus": '',
+    "dailyHours": '',
+    "patientsPerDay": ''
+  });
+
+  function onInputChange(e){
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  }
+
+  function createContractorJob(e){
+    e.preventDefault();
+
+    fetch("http://localhost:8080/api/v1/contractorjobs/createcontractorjob",{
+      method:"POST",
+      headers: {
+        'Content-Type': 'application/json',
+        // Add any additional headers if needed
+      },
+      body: JSON.stringify(formData)})
+    
+    .then((response)=>response.text())
+    .then((responseText)=>{
+      console.log(responseText);
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+
+    console.log("Hello smello");
+  };
+
+
+
+
+
   return (
     <Container>
-    <form>
+    <form onSubmit={createContractorJob}>
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
           {/* <p className="mt-1 text-sm leading-6 text-gray-600">
@@ -35,7 +85,7 @@ export default function Example() {
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
             <div className="sm:col-span-4">
-              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="year" className="block text-sm font-medium leading-6 text-gray-900">
                 Year
               </label>
               <div className="mt-2">
@@ -43,22 +93,24 @@ export default function Example() {
                   type="text"
                   name="year"
                   id="year"
-                  autoComplete="given-name"
                   placeholder='XXXX'
+                  value={formData.year}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="state" className="block text-sm font-medium leading-6 text-gray-900">
                 State
               </label>
               <div className="mt-2">
                 <select
-                  id="country"
-                  name="country"
-                  autoComplete="country-name"
+                  id="state"
+                  name="state"
+                  value={formData.state}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
                   <option>Alabama</option>
@@ -111,13 +163,26 @@ export default function Example() {
                   <option>West Virginia</option>
                   <option>Wisconsin</option>
                   <option>Wyoming</option>
+                  <option>Alberta</option>
+                  <option>British Columbia</option>
+                  <option>Manitoba</option>
+                  <option>New Brunswick</option>
+                  <option>Newfoundland and Labrador</option>
+                  <option>Nova Scotia</option>
+                  <option>Ontario</option>
+                  <option>Prince Edward Island</option>
+                  <option>Quebec</option>
+                  <option>Saskatchewan</option>
+                  <option>Yukon</option>
+                  <option>Nunavut</option>
+                  <option>Northwest Territories</option>
                   <option>Other</option>
                 </select>
               </div>
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">
                 City
               </label>
               <div className="mt-2">
@@ -126,20 +191,23 @@ export default function Example() {
                   name="city"
                   id="city"
                   placeholder='Type here'
+                  value={formData.city}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="practiceMode" className="block text-sm font-medium leading-6 text-gray-900">
                 Practice mode:
               </label>
               <div className="mt-2">
                 <select
                   id="practiceMode"
                   name="practiceMode"
-                  autoComplete="country-name"
+                  value={formData.practiceMode}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
                   <option>Private Practice</option>
@@ -154,14 +222,15 @@ export default function Example() {
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="setting" className="block text-sm font-medium leading-6 text-gray-900">
                 Setting:
               </label>
               <div className="mt-2">
                 <select
                   id="setting"
                   name="setting"
-                  autoComplete="country-name"
+                  value={formData.setting}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
                   <option>Urban</option>
@@ -173,109 +242,116 @@ export default function Example() {
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">
-                Estimated Daily day(Including bonus):
+              <label htmlFor="dailyRateAndBonus" className="block text-sm font-medium leading-6 text-gray-900">
+                Estimated Daily pay(Including bonus):
               </label>
               <div className="mt-2">
                 <input
                   type="text"
-                  name="street-address"
-                  id="street-address"
-                  autoComplete="street-address"
+                  name="dailyRateAndBonus"
+                  id="dailyRateAndBonus"
                   placeholder='XXX'
+                  value={formData.dailyRateAndBonus}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="healthInsuranceValue" className="block text-sm font-medium leading-6 text-gray-900">
                 Employer annual contribution to healthcare (Estimate):
               </label>
               <div className="mt-2">
                 <input
                   type="text"
-                  name="street-address"
-                  id="street-address"
-                  autoComplete="street-address"
+                  name="healthInsuranceValue"
+                  id="healthInsuranceValue"
                   placeholder='$'
+                  value={formData.healthInsuranceValue}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="otherBenefitsValue" className="block text-sm font-medium leading-6 text-gray-900">
                 Employer annual contribution to other benefits (Licensure, CE, insurance, etc.):
               </label>
               <div className="mt-2">
                 <input
                   type="text"
-                  name="street-address"
-                  id="street-address"
-                  autoComplete="street-address"
+                  name="otherBenefitsValue"
+                  id="otherBenefitsValue"
                   placeholder='$'
+                  value={formData.otherBenefitsValue}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="paidDaysOff" className="block text-sm font-medium leading-6 text-gray-900">
                 Paid days off per year:
               </label>
               <div className="mt-2">
                 <input
                   type="text"
-                  name="street-address"
-                  id="street-address"
-                  autoComplete="street-address"
+                  name="paidDaysOff"
+                  id="paidDaysOff"
+                  value={formData.paidDaysOff}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="dailyHours" className="block text-sm font-medium leading-6 text-gray-900">
                 Hours worked per day:
               </label>
               <div className="mt-2">
                 <input
                   type="text"
-                  name="street-address"
-                  id="street-address"
-                  autoComplete="street-address"
+                  name="dailyHours"
+                  id="dailyHours"
+                  value={formData.dailyHours}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="patientsPerDay" className="block text-sm font-medium leading-6 text-gray-900">
                 Patients seen per day:
               </label>
               <div className="mt-2">
                 <input
                   type="text"
-                  name="street-address"
-                  id="street-address"
-                  autoComplete="street-address"
+                  name="patientsPerDay"
+                  id="patientsPerDay"
+                  value={formData.patientsPerDay}
+                  onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div className="sm:col-span-5">
-              <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="comments" className="block text-sm font-medium leading-6 text-gray-900">
                 Comments:
               </label>
               <div className="mt-2">
                 <textarea
+                  rows={3}
                   id="comments"
                   name="comments"
-                  rows={3}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
-                  defaultValue={''}
+                  value={formData.comments}
+                  onChange={onInputChange}
                   placeholder='Please include other salary details or leave this blank. Helpful information would include bonus structure, revenue collected, weekends, etc.'
                 />
               </div>
@@ -284,108 +360,6 @@ export default function Example() {
 
           </div>
         </div>
-
-        {/* <div className="border-b border-gray-900/10 pb-12">
-          <h2 className="text-base font-semibold leading-7 text-gray-900">Notifications</h2>
-          <p className="mt-1 text-sm leading-6 text-gray-600">
-            We'll always let you know about important changes, but you pick what else you want to hear about.
-          </p>
-
-          <div className="mt-10 space-y-10">
-            <fieldset>
-              <legend className="text-sm font-semibold leading-6 text-gray-900">By Email</legend>
-              <div className="mt-6 space-y-6">
-                <div className="relative flex gap-x-3">
-                  <div className="flex h-6 items-center">
-                    <input
-                      id="comments"
-                      name="comments"
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    />
-                  </div>
-                  <div className="text-sm leading-6">
-                    <label htmlFor="comments" className="font-medium text-gray-900">
-                      Comments
-                    </label>
-                    <p className="text-gray-500">Get notified when someones posts a comment on a posting.</p>
-                  </div>
-                </div>
-                <div className="relative flex gap-x-3">
-                  <div className="flex h-6 items-center">
-                    <input
-                      id="candidates"
-                      name="candidates"
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    />
-                  </div>
-                  <div className="text-sm leading-6">
-                    <label htmlFor="candidates" className="font-medium text-gray-900">
-                      Candidates
-                    </label>
-                    <p className="text-gray-500">Get notified when a candidate applies for a job.</p>
-                  </div>
-                </div>
-                <div className="relative flex gap-x-3">
-                  <div className="flex h-6 items-center">
-                    <input
-                      id="offers"
-                      name="offers"
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    />
-                  </div>
-                  <div className="text-sm leading-6">
-                    <label htmlFor="offers" className="font-medium text-gray-900">
-                      Offers
-                    </label>
-                    <p className="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p>
-                  </div>
-                </div>
-              </div>
-            </fieldset>
-            <fieldset>
-              <legend className="text-sm font-semibold leading-6 text-gray-900">Push Notifications</legend>
-              <p className="mt-1 text-sm leading-6 text-gray-600">These are delivered via SMS to your mobile phone.</p>
-              <div className="mt-6 space-y-6">
-                <div className="flex items-center gap-x-3">
-                  <input
-                    id="push-everything"
-                    name="push-notifications"
-                    type="radio"
-                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                  />
-                  <label htmlFor="push-everything" className="block text-sm font-medium leading-6 text-gray-900">
-                    Everything
-                  </label>
-                </div>
-                <div className="flex items-center gap-x-3">
-                  <input
-                    id="push-email"
-                    name="push-notifications"
-                    type="radio"
-                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                  />
-                  <label htmlFor="push-email" className="block text-sm font-medium leading-6 text-gray-900">
-                    Same as email
-                  </label>
-                </div>
-                <div className="flex items-center gap-x-3">
-                  <input
-                    id="push-nothing"
-                    name="push-notifications"
-                    type="radio"
-                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                  />
-                  <label htmlFor="push-nothing" className="block text-sm font-medium leading-6 text-gray-900">
-                    No push notifications
-                  </label>
-                </div>
-              </div>
-            </fieldset>
-          </div>
-        </div> */}
       </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6">

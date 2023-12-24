@@ -6,9 +6,9 @@ const links = [
   ]
   const stats = [
     { name: 'Active US ODs', value: '40,000+' },
+    { name: 'Annual graduating ODs', value: '1,700+' },
     { name: 'Average 2022 OD graduate debt', value: '$225,000+' },
-    { name: 'Hours per week', value: '40' },
-    { name: '', value: '' },
+    // { name: '', value: '' },
   ]
   
   export default function WorkWithUs() {
@@ -59,7 +59,7 @@ const links = [
                 </a>
               ))}
             </div>
-            <dl className="mt-16 grid grid-cols-1 gap-8 sm:mt-20 sm:grid-cols-2 lg:grid-cols-4">
+            <dl className="mt-16 grid grid-cols-1 gap-8 sm:mt-20 sm:grid-cols-2 lg:grid-cols-3">
               {stats.map((stat) => (
                 <div key={stat.name} className="flex flex-col-reverse">
                   <dt className="text-base leading-7 text-gray-100">{stat.name}</dt>
