@@ -110,7 +110,7 @@ export function Hero() {
               Advocating Optometry Salary Transparency Through Data.
             </h1>
             <p className="mt-6 text-xl text-gray-600">
-              Sharing data and analytics with optometrists.
+              Sharing salary data and metrics with optometrists.
             </p>
             <div className="mt-8 flex flex-wrap gap-x-6 gap-y-4">
               {/* <AppStoreLink /> */}

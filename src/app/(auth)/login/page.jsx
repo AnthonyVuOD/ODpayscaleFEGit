@@ -11,19 +11,15 @@ export const metadata = {
 export default function Login() {
   return (
     <AuthLayout
-      title="Sign in to account"
+      title="Sign in with your Facebook or Google account!"
       subtitle={
         <>
-          Don’t have an account?{' '}
-          <Link href="/register" className="text-cyan-600">
-            Sign up
-          </Link>{' '}
-          for a free trial.
+          Add your salaries to promote compensation transparency.
         </>
       }
     >
       <form>
-        <div className="space-y-6">
+        {/* <div className="space-y-6">
           <TextField
             label="Email address"
             name="email"
@@ -38,9 +34,12 @@ export default function Login() {
             autoComplete="current-password"
             required
           />
-        </div>
+        </div> */}
         <Button type="submit" color="cyan" className="mt-8 w-full">
-          Sign in to account
+          Sign in with Facebook account
+        </Button>
+        <Button type="submit" color="cyan" className="mt-8 w-full">
+          Sign in with Google account
         </Button>
       </form>
     </AuthLayout>

@@ -68,7 +68,7 @@ export default function ODForm() {
         </div>
 
         <div className="border-b border-gray-900/10 pb-12">
-          <h2 className="text-base font-semibold leading-7 text-gray-900">User information</h2>
+          <h2 className="text-base font-semibold leading-7 text-gray-900">User Account</h2>
           <p className="mt-1 text-sm leading-6 text-gray-600">
             To provide better analytics, please answer the questions below:
           </p>
@@ -173,14 +173,15 @@ export default function ODForm() {
       </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
-        <button 
-          type="button"
+        <a
+          href="/data"
           className="text-sm font-semibold leading-6 text-gray-900"
         >
           Cancel
-        </button>
+        </a>
         <button
-          type="submit"
+          // href="/account"
+          type='submit'
           className="rounded-md bg-cyan-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           Save

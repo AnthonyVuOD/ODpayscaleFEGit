@@ -19,7 +19,7 @@ import { useState } from 'react';
 
 export default function Example() {
 
-  const [formData, setFormData] = useState({
+  const [w2FormData, setW2FormData] = useState({
     "optometristId":'2',
     "year" : '',
     "state" : 'Alabama',
@@ -37,7 +37,7 @@ export default function Example() {
 
   function onInputChange(e){
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setW2FormData({ ...w2FormData, [name]: value });
   }
 
   function createW2Job(e){
@@ -49,7 +49,7 @@ export default function Example() {
         'Content-Type': 'application/json',
         // Add any additional headers if needed
       },
-      body: JSON.stringify(formData)})
+      body: JSON.stringify(w2FormData)})
     
     .then((response)=>response.text())
     .then((responseText)=>{
@@ -91,7 +91,7 @@ export default function Example() {
                   type="text"
                   name="year"
                   id="year"
-                  value={formData.year}
+                  value={w2FormData.year}
                   onChange={onInputChange}
                   placeholder='XXXX'
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
@@ -107,7 +107,7 @@ export default function Example() {
                 <select
                   id="state"
                   name="state"
-                  value={formData.state}
+                  value={w2FormData.state}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
@@ -188,7 +188,7 @@ export default function Example() {
                   type="text"
                   name="city"
                   id="city"
-                  value={formData.city}
+                  value={w2FormData.city}
                   onChange={onInputChange}
                   placeholder='Type here'
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
@@ -204,7 +204,7 @@ export default function Example() {
                 <select
                   id="practiceMode"
                   name="practiceMode"
-                  value={formData.practiceMode}
+                  value={w2FormData.practiceMode}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
@@ -227,7 +227,7 @@ export default function Example() {
                 <select
                   id="setting"
                   name="setting"
-                  value={formData.setting}
+                  value={w2FormData.setting}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
@@ -248,7 +248,7 @@ export default function Example() {
                   type="text"
                   name="annualSalaryAndBonus"
                   id="annualSalaryAndBonus"
-                  value={formData.annualSalaryAndBonus}
+                  value={w2FormData.annualSalaryAndBonus}
                   onChange={onInputChange}
                   placeholder='XXX,XXX'
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
@@ -265,7 +265,7 @@ export default function Example() {
                   type="text"
                   name="healthInsuranceValue"
                   id="healthInsuranceValue"
-                  value={formData.healthInsuranceValue}
+                  value={w2FormData.healthInsuranceValue}
                   onChange={onInputChange}
                   placeholder='$'
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
@@ -282,7 +282,7 @@ export default function Example() {
                   type="text"
                   name="otherBenefitsValue"
                   id="otherBenefitsValue"
-                  value={formData.otherBenefitsValue}
+                  value={w2FormData.otherBenefitsValue}
                   onChange={onInputChange}
                   placeholder='$'
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
@@ -299,7 +299,7 @@ export default function Example() {
                   type="text"
                   name="paidDaysOff"
                   id="paidDaysOff"
-                  value={formData.paidDaysOff}
+                  value={w2FormData.paidDaysOff}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
@@ -315,7 +315,7 @@ export default function Example() {
                   type="text"
                   name="weeklyHours"
                   id="weeklyHours"
-                  value={formData.weeklyHours}
+                  value={w2FormData.weeklyHours}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
@@ -331,7 +331,7 @@ export default function Example() {
                   type="text"
                   name="patientsPerWeek"
                   id="patientsPerWeek"
-                  value={formData.patientsPerWeek}
+                  value={w2FormData.patientsPerWeek}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
@@ -347,7 +347,7 @@ export default function Example() {
                   id="comments"
                   name="comments"
                   rows={3}
-                  value={formData.comments}
+                  value={w2FormData.comments}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                   placeholder='Please include other salary details or leave this blank. Helpful information would include bonus structure, revenue collected, weekends, etc.'

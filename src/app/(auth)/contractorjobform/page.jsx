@@ -19,7 +19,7 @@ import { useState } from 'react';
 
 export default function ContractorJobForm() {
 
-  const [formData, setFormData] = useState({
+  const [contractorFormData, setContractorFormData] = useState({
     "optometristId":'2',
     "year" : '',
     "state" : 'Alabama',
@@ -37,7 +37,7 @@ export default function ContractorJobForm() {
 
   function onInputChange(e){
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setContractorFormData({ ...contractorFormData, [name]: value });
   }
 
   function createContractorJob(e){
@@ -49,7 +49,7 @@ export default function ContractorJobForm() {
         'Content-Type': 'application/json',
         // Add any additional headers if needed
       },
-      body: JSON.stringify(formData)})
+      body: JSON.stringify(contractorFormData)})
     
     .then((response)=>response.text())
     .then((responseText)=>{
@@ -94,7 +94,7 @@ export default function ContractorJobForm() {
                   name="year"
                   id="year"
                   placeholder='XXXX'
-                  value={formData.year}
+                  value={contractorFormData.year}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
@@ -109,7 +109,7 @@ export default function ContractorJobForm() {
                 <select
                   id="state"
                   name="state"
-                  value={formData.state}
+                  value={contractorFormData.state}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
@@ -191,7 +191,7 @@ export default function ContractorJobForm() {
                   name="city"
                   id="city"
                   placeholder='Type here'
-                  value={formData.city}
+                  value={contractorFormData.city}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
@@ -206,7 +206,7 @@ export default function ContractorJobForm() {
                 <select
                   id="practiceMode"
                   name="practiceMode"
-                  value={formData.practiceMode}
+                  value={contractorFormData.practiceMode}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
@@ -229,7 +229,7 @@ export default function ContractorJobForm() {
                 <select
                   id="setting"
                   name="setting"
-                  value={formData.setting}
+                  value={contractorFormData.setting}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
@@ -251,7 +251,7 @@ export default function ContractorJobForm() {
                   name="dailyRateAndBonus"
                   id="dailyRateAndBonus"
                   placeholder='XXX'
-                  value={formData.dailyRateAndBonus}
+                  value={contractorFormData.dailyRateAndBonus}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
@@ -268,7 +268,7 @@ export default function ContractorJobForm() {
                   name="healthInsuranceValue"
                   id="healthInsuranceValue"
                   placeholder='$'
-                  value={formData.healthInsuranceValue}
+                  value={contractorFormData.healthInsuranceValue}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
@@ -285,7 +285,7 @@ export default function ContractorJobForm() {
                   name="otherBenefitsValue"
                   id="otherBenefitsValue"
                   placeholder='$'
-                  value={formData.otherBenefitsValue}
+                  value={contractorFormData.otherBenefitsValue}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
@@ -301,7 +301,7 @@ export default function ContractorJobForm() {
                   type="text"
                   name="paidDaysOff"
                   id="paidDaysOff"
-                  value={formData.paidDaysOff}
+                  value={contractorFormData.paidDaysOff}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
@@ -317,7 +317,7 @@ export default function ContractorJobForm() {
                   type="text"
                   name="dailyHours"
                   id="dailyHours"
-                  value={formData.dailyHours}
+                  value={contractorFormData.dailyHours}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
@@ -333,7 +333,7 @@ export default function ContractorJobForm() {
                   type="text"
                   name="patientsPerDay"
                   id="patientsPerDay"
-                  value={formData.patientsPerDay}
+                  value={contractorFormData.patientsPerDay}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
@@ -350,7 +350,7 @@ export default function ContractorJobForm() {
                   id="comments"
                   name="comments"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
-                  value={formData.comments}
+                  value={contractorFormData.comments}
                   onChange={onInputChange}
                   placeholder='Please include other salary details or leave this blank. Helpful information would include bonus structure, revenue collected, weekends, etc.'
                 />
