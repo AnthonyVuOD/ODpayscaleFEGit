@@ -1,5 +1,6 @@
 'use client'
 
+import { PaperClipIcon } from '@heroicons/react/20/solid'
 import { Container } from "@/components/Container"
 import { Header } from "@/components/Header"
 import { DataTable } from 'primereact/datatable';
@@ -8,7 +9,7 @@ import { Tag } from "primereact/tag";
 import { Toast } from "primereact/toast";
 import { Footer } from "@/components/Footer";
 import { CurrencyService } from 'primereact/api';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from 'primereact/button';
 
 import "primereact/resources/themes/tailwind-light/theme.css";
@@ -63,7 +64,7 @@ import 'primeicons/primeicons.css';
 
 
     // Delete button template for each row.
-    const actionTemplate = (rowData) => {
+    const deleteTemplate = (rowData) => {
       return (
         <>
           <button
@@ -112,34 +113,99 @@ import 'primeicons/primeicons.css';
 
     /// allows row expansion
     const allowExpansion = (rowData) => {
-      return rowData.id!=null;
+      if (rowData.id!=null){
+        return true;
+      } return false;
     };
 
     const onRowExpand = (event) => {
-      // toast.current.show({ severity: 'success', summary: 'Product Collapsed', detail: event.jobCollection.id, life: 3000 });
-      alert("Row expand!");
     };
 
     const onRowCollapse = (event) => {
-      // toast.current.show({ severity: 'success', summary: 'Product Collapsed', detail: event.jobCollection.id, life: 3000 });
-      // setExpandedRows(null);
-      alert("Row collapse!");
     };
 
-    
-
-
     /////Template for row expansion
-    const rowExpansionTemplate = (jobCollection) => {
+    const rowExpansionTemplate = (rowData) => {
       return (
-          <div className="p-3">
-              <DataTable value={jobCollection.id}>
-                  <Column field="state" header="State" sortable></Column>
-                  <Column field="city" header="City" sortable></Column>
-                  <Column field="state" header="State" body={state} ></Column>
-                  <Column field="city" header="City" body={city} ></Column>
-              </DataTable>
+          // <div className="px-20 py-3 text-right text-sm text-gray-900">
+          //       {rowData.weeklyHours!=null &&(
+          //         <h1>W-2 Job </h1>
+          //       )}
+          //       {rowData.dailyHours!=null &&(
+          //         <h1>Contractor Job </h1>
+          //       )}
+
+          //       <p>{rowData.compPerHour}</p>
+          //       <p>{rowData.compPerPatient}</p>
+          //       <p>{rowData.dailyHours}</p>
+          //       <p>{rowData.weeklyHours}</p>
+          // </div>
+          <div>
+      <div className="px-5 sm:px-0 ">
+        {rowData.dailyRateAndBonus!=null && (<h3 className=" font-semibold leading-7 text-gray-900 pl-24">Contractor (1099)</h3>)}
+        {rowData.annualSalaryAndBonus!=null && (<h3 className=" font-semibold leading-7 text-gray-900 pl-24">Employed (W-2)</h3>)}
+      </div>
+      <div className="mt-6 pl-24">
+        <dl className="grid grid-cols-1 sm:grid-cols-4">
+          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">
+              {rowData.dailyRateAndBonus!=null && (<p>Daily Pay with Bonus</p>)}
+              {rowData.annualSalaryAndBonus!=null && (<p>Annual Pay with Bonus</p>)}
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
+              {rowData.dailyRateAndBonus!=null && (<p>{rowData.dailyRateAndBonus}</p>)}
+              {rowData.annualSalaryAndBonus!=null && (<p>{rowData.annualSalaryAndBonus}</p>)}
+            </dd>
           </div>
+          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">
+              {rowData.dailyHours!=null && (<p>Hours/Day</p>)}
+              {rowData.weeklyHours!=null && (<p>Hours/Week</p>)}
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
+              {rowData.dailyHours!=null && (<p>{rowData.dailyHours}</p>)}
+              {rowData.weeklyHours!=null && (<p>{rowData.weeklyHours}</p>)}
+            </dd>
+          </div>
+          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">
+              {rowData.patientsPerDay!=null && (<p>Patients/Day</p>)}
+              {rowData.patientsPerWeek!=null && (<p>Patients/Week</p>)}
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
+              {rowData.patientsPerDay!=null && (<p>{rowData.patientsPerDay}</p>)}
+              {rowData.patientsPerWeek!=null && (<p>{rowData.patientsPerWeek}</p>)}
+            </dd>
+          </div>
+          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">Total Comp/Patient</dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.compPerPatient}</dd>
+          </div>
+          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">Total Comp/Hour</dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.compPerHour}</dd>
+          </div>
+          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">Employer Annual Health Ins</dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.healthInsuranceValue}</dd>
+          </div>
+          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">Employer Annual Other Benefits</dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.otherBenefitsValue}</dd>
+          </div>
+          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">Paid Days Off</dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.paidDaysOff}</dd>
+          </div>
+          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">Comments</dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
+              {rowData.comments}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
       );
     };
 
@@ -151,7 +217,7 @@ import 'primeicons/primeicons.css';
 
       <>
         <Header/>
-          <div className="px-4 sm:px-10 lg:px-10 xl:px-40 py-5">
+          <div className="px-4 sm:px-10 lg:px-10 xl:px-20 py-5">
             <div className="sm:flex sm:items-center">
               <div className="sm:flex-auto">
                 <h1 className="text-base font-semibold leading-6 text-gray-900">Your Salary Compensation History:</h1>
@@ -218,7 +284,7 @@ import 'primeicons/primeicons.css';
 
                       //EXPANSION
                       expandedRows={expandedRows} 
-                      onRowToggle={(e) => setExpandedRows(e.jobCollection)}
+                      onRowToggle={(e) => setExpandedRows(e.data)}
                       onRowExpand={onRowExpand} 
                       onRowCollapse={onRowCollapse} 
                       rowExpansionTemplate={rowExpansionTemplate}
@@ -228,17 +294,16 @@ import 'primeicons/primeicons.css';
                         <Column 
                                 expander={allowExpansion}
                                 style={{ width: '5%' }}
-                                >Expand</Column>
+                                >
+                                </Column>
                                 
-                        <Column 
-                        // className="px-3 py-3.5 text-left text-sm text-gray-900" 
+                        <Column  
                                 field="year" 
                                 header="Year" 
                                 sortable style={{ width: '15%' }}
                                 ></Column>
 
                         <Column 
-                        // className="px-3 py-3.5 text-left text-sm text-gray-900" 
                                 field="state" 
                                 header="State" 
                                 filterPlaceholder="Search"
@@ -246,21 +311,8 @@ import 'primeicons/primeicons.css';
                                 filter 
                                 style={{ width: '15%' }}
                                 ></Column>
-                        {/* <Column 
-                        // className="px-3 py-3.5 text-left text-sm text-gray-900" 
-                                field="setting" 
-                                header="Setting" 
-                                filterPlaceholder="Search" 
-                                showFilterMenu={false}
-                                filter
-                                filterField="setting" 
-                                // body={settingBodyTemplate} 
-                                // filterElement={settingRowFilterTemplate} 
-                                style={{ width: '15%' }}
-                                ></Column> */}
 
                         <Column 
-                        // className="px-3 py-3.5 text-left text-sm text-gray-900" 
                                 field="city" 
                                 header="City" 
                                 filterPlaceholder="Search" 
@@ -268,25 +320,8 @@ import 'primeicons/primeicons.css';
                                 filter 
                                 style={{ width: '15%' }}
                                 ></Column>
-                        {/* <Column 
-                        // className="px-3 py-3.5 text-left text-sm text-gray-900" 
-                                field="practiceMode" 
-                                header="Practice Mode" 
-                                filterPlaceholder="Search"
-                                showFilterMenu={false} 
-                                filter 
-                                style={{ width: '15%' }}
-                                ></Column> */}
-  
-                        {/* <Column 
-                        // className="px-3 py-3.5 text-left text-sm text-gray-900" 
-                                field="yearsOfExperience" 
-                                header="YOE" 
-                                sortable style={{ width: '5%' }}
-                                ></Column> */}
 
                         <Column 
-                        // className="px-3 py-3.5 text-left text-sm text-gray-900" 
                                 field="normalizedAnnualComp" 
                                 header="Standardized Annual Comp" 
                                 body={currencyBodyTemplate}
@@ -295,11 +330,9 @@ import 'primeicons/primeicons.css';
                                 ></Column>
 
                         <Column 
-                                body={actionTemplate} 
-                                // header="Action"
+                                body={deleteTemplate}
                                 style={{ width: '5%' }}
                                 ></Column>  
-                        
                     </DataTable>
 
                   </div>

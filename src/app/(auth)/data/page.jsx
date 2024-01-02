@@ -66,7 +66,7 @@ const currencyBodyTemplate = (rowData) => {
     return (
       <>
         <Header/>
-          <div className="px-4 sm:px-10 lg:px-10 xl:px-40 py-5">
+          <div className="px-4 sm:px-10 lg:px-10 xl:px-20 py-5">
             <div className="sm:flex sm:items-center">
               <div className="sm:flex-auto">
                 <h1 className="text-base font-semibold leading-6 text-gray-900">Explore Optometry Compensation Packages:</h1>
