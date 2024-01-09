@@ -29,6 +29,7 @@ export default function ODForm() {
     "race": 'Caucasian',
   });
 
+
   function onInputChange(e){
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -103,7 +104,8 @@ export default function ODForm() {
                   name="initialDebt"
                   type="text"
                   placeholder='Please answer in USD'
-                  value={formData.initialDebt}
+                  // value={formData.initialDebt}
+                  
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
@@ -119,6 +121,7 @@ export default function ODForm() {
                   id="residency"
                   name="residency"
                   value={formData.residency}
+                  
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
@@ -172,7 +175,7 @@ export default function ODForm() {
         </div>
       </div>
 
-      <div className="mt-6 flex items-center justify-end gap-x-6">
+      <div className="mt-6 flex items-center justify-end gap-x-6 pb-10">
         <a
           href="/data"
           className="text-sm font-semibold leading-6 text-gray-900"

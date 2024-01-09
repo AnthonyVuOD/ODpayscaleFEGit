@@ -19,9 +19,9 @@ import 'primeicons/primeicons.css';
 
 
 
-  export default function Data() {
+export default function Data() {
 
-    //API call to populate jobCollection data.
+////////API call to populate jobCollection data/////////////////
     const [jobCollection, setJobCollection] = useState([]);
 
     async function fetchData(){
@@ -63,7 +63,7 @@ import 'primeicons/primeicons.css';
 
 
 
-    // Delete button template for each row.
+ ///////// Delete button template for each row/////////
     const deleteTemplate = (rowData) => {
       return (
         <>
@@ -99,7 +99,7 @@ import 'primeicons/primeicons.css';
           alert(apiDeleteUrl); 
         });
       console.log(`${jobId}`);
-      window.location.reload();
+      // window.location.reload();
     };
     
 
@@ -108,7 +108,7 @@ import 'primeicons/primeicons.css';
 
 
 
-    //////// Row Expansion
+///////////// Row Expansion//////////////////
     const [expandedRows, setExpandedRows] = useState(null);
 
     /// allows row expansion
@@ -127,85 +127,72 @@ import 'primeicons/primeicons.css';
     /////Template for row expansion
     const rowExpansionTemplate = (rowData) => {
       return (
-          // <div className="px-20 py-3 text-right text-sm text-gray-900">
-          //       {rowData.weeklyHours!=null &&(
-          //         <h1>W-2 Job </h1>
-          //       )}
-          //       {rowData.dailyHours!=null &&(
-          //         <h1>Contractor Job </h1>
-          //       )}
-
-          //       <p>{rowData.compPerHour}</p>
-          //       <p>{rowData.compPerPatient}</p>
-          //       <p>{rowData.dailyHours}</p>
-          //       <p>{rowData.weeklyHours}</p>
-          // </div>
-          <div>
-      <div className="px-5 sm:px-0 ">
-        {rowData.dailyRateAndBonus!=null && (<h3 className=" font-semibold leading-7 text-gray-900 pl-24">Contractor (1099)</h3>)}
-        {rowData.annualSalaryAndBonus!=null && (<h3 className=" font-semibold leading-7 text-gray-900 pl-24">Employed (W-2)</h3>)}
-      </div>
-      <div className="mt-6 pl-24">
-        <dl className="grid grid-cols-1 sm:grid-cols-4">
-          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">
-              {rowData.dailyRateAndBonus!=null && (<p>Daily Pay with Bonus</p>)}
-              {rowData.annualSalaryAndBonus!=null && (<p>Annual Pay with Bonus</p>)}
-            </dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-              {rowData.dailyRateAndBonus!=null && (<p>{rowData.dailyRateAndBonus}</p>)}
-              {rowData.annualSalaryAndBonus!=null && (<p>{rowData.annualSalaryAndBonus}</p>)}
-            </dd>
+        <div>
+          <div className="px-5 sm:px-0 ">
+            {rowData.dailyRateAndBonus!=null && (<h3 className=" font-semibold leading-7 text-gray-900 pl-48">Contractor (1099)</h3>)}
+            {rowData.annualSalaryAndBonus!=null && (<h3 className=" font-semibold leading-7 text-gray-900 pl-48">Employed (W-2)</h3>)}
           </div>
-          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">
-              {rowData.dailyHours!=null && (<p>Hours/Day</p>)}
-              {rowData.weeklyHours!=null && (<p>Hours/Week</p>)}
-            </dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-              {rowData.dailyHours!=null && (<p>{rowData.dailyHours}</p>)}
-              {rowData.weeklyHours!=null && (<p>{rowData.weeklyHours}</p>)}
-            </dd>
+          <div className="mt-6 pl-48">
+            <dl className="grid grid-cols-1 sm:grid-cols-4">
+              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  {rowData.dailyRateAndBonus!=null && (<p>Daily Pay with Bonus</p>)}
+                  {rowData.annualSalaryAndBonus!=null && (<p>Annual Pay with Bonus</p>)}
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
+                  {rowData.dailyRateAndBonus!=null && (<p>{rowData.dailyRateAndBonus}</p>)}
+                  {rowData.annualSalaryAndBonus!=null && (<p>{rowData.annualSalaryAndBonus}</p>)}
+                </dd>
+              </div>
+              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">Employer Annual Health Ins</dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.healthInsuranceValue}</dd>
+              </div>
+              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">Employer Annual Other Benefits</dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.otherBenefitsValue}</dd>
+              </div>
+              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">Paid Days Off</dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.paidDaysOff}</dd>
+              </div>
+              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  {rowData.dailyHours!=null && (<p>Hours/Day</p>)}
+                  {rowData.weeklyHours!=null && (<p>Hours/Week</p>)}
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
+                  {rowData.dailyHours!=null && (<p>{rowData.dailyHours}</p>)}
+                  {rowData.weeklyHours!=null && (<p>{rowData.weeklyHours}</p>)}
+                </dd>
+              </div>
+              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  {rowData.patientsPerDay!=null && (<p>Patients/Day</p>)}
+                  {rowData.patientsPerWeek!=null && (<p>Patients/Week</p>)}
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
+                  {rowData.patientsPerDay!=null && (<p>{rowData.patientsPerDay}</p>)}
+                  {rowData.patientsPerWeek!=null && (<p>{rowData.patientsPerWeek}</p>)}
+                </dd>
+              </div>
+              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">Total Comp/Patient</dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.compPerPatient}</dd>
+              </div>
+              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">Total Comp/Hour</dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.compPerHour}</dd>
+              </div>
+              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">Comments</dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
+                  {rowData.comments}
+                </dd>
+              </div>
+            </dl>
           </div>
-          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">
-              {rowData.patientsPerDay!=null && (<p>Patients/Day</p>)}
-              {rowData.patientsPerWeek!=null && (<p>Patients/Week</p>)}
-            </dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-              {rowData.patientsPerDay!=null && (<p>{rowData.patientsPerDay}</p>)}
-              {rowData.patientsPerWeek!=null && (<p>{rowData.patientsPerWeek}</p>)}
-            </dd>
-          </div>
-          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">Total Comp/Patient</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.compPerPatient}</dd>
-          </div>
-          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">Total Comp/Hour</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.compPerHour}</dd>
-          </div>
-          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">Employer Annual Health Ins</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.healthInsuranceValue}</dd>
-          </div>
-          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">Employer Annual Other Benefits</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.otherBenefitsValue}</dd>
-          </div>
-          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">Paid Days Off</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.paidDaysOff}</dd>
-          </div>
-          <div className="border-t border-gray-100 px-4 py-6 sm:col-span-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">Comments</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-              {rowData.comments}
-            </dd>
-          </div>
-        </dl>
-      </div>
-    </div>
+        </div>
       );
     };
 
@@ -300,7 +287,7 @@ import 'primeicons/primeicons.css';
                         <Column  
                                 field="year" 
                                 header="Year" 
-                                sortable style={{ width: '15%' }}
+                                sortable style={{ width: '5%' }}
                                 ></Column>
 
                         <Column 
@@ -320,6 +307,17 @@ import 'primeicons/primeicons.css';
                                 filter 
                                 style={{ width: '15%' }}
                                 ></Column>
+
+                        <Column 
+                        // className="px-3 py-3.5 text-left text-sm text-gray-900" 
+                                field="setting" 
+                                header="Setting" 
+                                filterPlaceholder="Search" 
+                                showFilterMenu={false}
+                                filter
+                                filterField="setting" 
+                                style={{ width: '15%' }}
+                                ></Column>    
 
                         <Column 
                                 field="normalizedAnnualComp" 
