@@ -8,6 +8,7 @@ import { DataTableFilterMeta, header, representativeBodyTemplate, representative
 import { Footer } from "@/components/Footer";
 import { CurrencyService } from 'primereact/api';
 import { useState, useEffect } from "react";
+import { Formatting } from "@/components/Formatting";
 
 
 // import { React as ReactClient, useClient, unstable_useEffect as useEffect, useState as useStateClient } from "react";// import { useEffect, useClient } from "react";
@@ -52,30 +53,20 @@ export default function Data() {
       fetchData();
     }, []);
 
-//////formatting normalizedAnnualComp rounded to nearest dollar//////
-const currencyBodyTemplate = (rowData) => {
-  const formattedCurrency = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-    }).format(rowData.normalizedAnnualComp);
+// ////formatting of currency //////
+const { currencyBodyTemplate } = Formatting();
+const {healthInsuranceFormatted} = Formatting();
+const {otherBenefitsFormatted} = Formatting();
+const {paidDaysOffFormatted} = Formatting();
+const {compPerPatientFormatted} = Formatting();
+const {compPerHourFormatted} = Formatting();
+const {annualSalaryAndBonusFormatted} = Formatting()
+const {dailyRateAndBonusFormatted} = Formatting()
+const {annualizedDailyRateAndBonusFormatted} = Formatting()
 
-  return <span>{formattedCurrency}</span>;
-};
 
-// const createCurrencyBodyTemplate = (propertyName) => (rowData) => {
-//   const formattedCurrency = new Intl.NumberFormat('en-US', {
-//     style: 'currency',
-//     currency: 'USD',
-//     maximumFractionDigits: 0,
-//   }).format(rowData[propertyName]);
 
-//   return <span>{formattedCurrency}</span>;
-// };
 
-// Usage example:
-// const annualCompBodyTemplate = createCurrencyBodyTemplate('normalizedAnnualComp');
-// const otherVariableBodyTemplate = createCurrencyBodyTemplate('otherVariable');
 
 
 
@@ -95,88 +86,82 @@ const currencyBodyTemplate = (rowData) => {
   const onRowCollapse = (event) => {
   };
 
+
+
   /////Template for row expansion
   const rowExpansionTemplate = (rowData) => {
     return (
       <div>
         <div className="px-5 sm:px-0 ml-48">
-          <dl className="grid grid-cols-1 sm:grid-cols-2">
-            <div className="border-t border-gray-100 px-4 py-2 sm:col-span-1 sm:px-0 text-center bg-slate-100 rounded">
-               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                {rowData.dailyRateAndBonus!=null && (<h3 className=" font-semibold leading-7 text-gray-900 inline-block">Contractor (1099)</h3>)}
-                {rowData.annualSalaryAndBonus!=null && (<h3 className=" font-semibold leading-7 text-gray-900 inline-block">Employed (W-2)</h3>)}
-                <h3 className="font-medium leading-7 text-gray-900 pl-10 inline-block">{rowData.city},</h3>
-                <h3 className="font-medium leading-7 text-gray-900 pl-2 inline-block">{rowData.state}</h3>
+          <dl className="grid grid-cols-1 sm:grid-cols-4">
+            <div className="border-t border-gray-100 px-2 py-4 sm:col-span-1 sm:px-0 bg-slate-100 rounded">
+               <dd className="mt-1 text-sm leading-6 pl-10 text-gray-700 sm:mt-2">
+                {rowData.dailyRateAndBonus!=null && (<h3 className=" font-semibold leading-1 text-gray-900 inline-block">Contractor (1099)</h3>)}
+                {rowData.annualSalaryAndBonus!=null && (<h3 className=" font-semibold leading-1 text-gray-900 inline-block">Employed (W-2)</h3>)}
                </dd>
             </div>
-
-            {/* <div className="border-t border-gray-100 px-4 py-2 sm:col-span-1 sm:px-0 text-center bg-slate-100 rounded-r-xl">
-               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                <h3 className="font-semibold leading-7 text-gray-900 pl-10 inline-block">{rowData.city},</h3>
-                <h3 className="font-semibold leading-7 text-gray-900 pl-2 inline-block">{rowData.state}</h3>
+            <div className="border-t border-gray-100 px-2 py-4 sm:col-span-1 sm:px-0 bg-slate-100 rounded mr-1">
+               <dd className="mt-1 text-sm leading-6 text-right text-gray-700 sm:mt-2">
+               {rowData.city !== "" ? (
+                  <h3 className="font-medium leading-7 text-gray-900 pr-1 inline-block">
+                    {rowData.city},
+                  </h3>
+                ) : (
+                  <h3 className="font-medium leading-7 text-gray-900 pr-1 inline-block">
+                    No city specified,
+                  </h3>
+                )}
+                <h3 className="font-medium leading-7 text-gray-900 pr-10 inline-block">{rowData.state}</h3>
                </dd>
-            </div> */}
-
-            {/* <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                <h3 className="font-semibold leading-7 text-gray-900 pl-10 inline-block">{rowData.setting}</h3>
-               </dd>
-            </div> */}
-
-            {/* <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                <h3 className="font-semibold leading-7 text-gray-900 pl-10 inline-block">{rowData.practiceMode}</h3>
-               </dd>
-            </div> */}
-
-            {/* <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                <h3 className="font-semibold leading-7 text-gray-900 pl-10 inline-block">{rowData.yearsOfExperience}</h3>
-               </dd>
-            </div>  */}
+            </div>
           </dl>
         </div>
 
         <div className="mt-6 pl-48 	">
           <dl className="grid grid-cols-1 sm:grid-cols-10 ">
-            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-4 sm:px-0 bg-slate-100 rounded-l-md">
-              <dt className="text-sm  leading-relaxed text-gray-900">
-                <p>Annualized Daily Rate ({rowData.dailyRateAndBonus})</p>
+            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-3 sm:px-0 bg-slate-100 rounded-l-md">
+              <dt className="text-sm  leading-relaxed pl-10 text-gray-900">
+                {rowData.dailyRateAndBonus!=null && (<p>Annualized Daily Rate ({dailyRateAndBonusFormatted(rowData)})</p>)}
+                {rowData.annualSalaryAndBonus!=null && (<p>Annual Salary and Bonus</p>)}
                 <p>Health Insurance Value</p>
                 <p>Other Benefits Value</p>
-                <p>{rowData.paidDaysOff} Paid Days Off Value (Estimated)</p>
-                <hr />
-                <p>Standardized Annual Compensation</p>
+                <p>{rowData.paidDaysOff} Days PTO Estimated Value</p>
+                <hr style={{ borderTop: '1px solid gray', margin: '2px 0'  }}/>
+                <p>Total Annual Compensation</p>
               </dt>
             </div>
 
-            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0 bg-slate-100 rounded-r-md">
-              <dd className="text-sm leading-relaxed font-medium  text-gray-900">
-                <p>{rowData.dailyRateAndBonus*255}</p>
-                <p>{rowData.healthInsuranceValue}</p>
-                <p>{rowData.otherBenefitsValue}</p>
-                {/* <p>{rowData.paidDaysOff}</p> */}
-                <p>{rowData.paidDaysOffValue}</p>
-                <hr></hr>
-                <p>{rowData.normalizedAnnualComp}</p>
+            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-2 sm:px-0 bg-slate-100 rounded-r-md mr-1">
+              <dd className="text-sm leading-relaxed font-medium text-right pr-10 text-gray-900">
+                {rowData.dailyRateAndBonus!=null && (<p>{annualizedDailyRateAndBonusFormatted(rowData)}</p>)}
+                {rowData.annualSalaryAndBonus!=null && (<p>{annualSalaryAndBonusFormatted(rowData)}</p>)}
+                <p>{healthInsuranceFormatted(rowData)}</p>
+                <p>{otherBenefitsFormatted(rowData)}</p>
+                <p>{paidDaysOffFormatted(rowData)}</p>
+                <hr style={{ borderTop: '1px solid gray', margin: '2px 0'  }}/>
+                <p>{currencyBodyTemplate(rowData)}</p>
               </dd>
             </div>
 
-            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-3 sm:px-0 bg-slate-100  rounded-md">
-              <dt className="text-sm  leading-relaxed text-gray-900">
-                <p>Patients/Day</p>
-                <p>Hours/Day</p>
-                <p>Comp/Patient</p>
-                <p>Comp/Hour</p>
+            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-3 sm:px-0 bg-slate-100 ml-1 rounded-md">
+              <dt className="text-sm pl-10 leading-relaxed text-gray-900">
+                {rowData.patientsPerDay!=null && (<p>Patients/Day</p>)}
+                {rowData.patientsPerWeek!=null && (<p>Patients/Week</p>)}
+                {rowData.dailyHours!=null && (<p>Hours/Day</p>)}
+                {rowData.weeklyHours!=null && (<p>Hours/Week</p>)}
+                <p>Total Comp/Patient</p>
+                <p>Total Comp/Hour</p>
               </dt>
             </div>
 
             <div className="border-t border-gray-100 px-4 py-6 sm:col-span-2 sm:px-0 bg-slate-100 rounded-md">
-              <dd className="text-sm font-medium leading-relaxed text-gray-900">
-                <p>{rowData.patientsPerDay}</p>
-                <p>{rowData.dailyHours}</p>
-                <p>{rowData.compPerPatient}</p>
-                <p>{rowData.compPerHour}</p>
+              <dd className="text-sm font-medium pr-10 text-right leading-relaxed text-gray-900">
+                {rowData.patientsPerDay!=null && (<p>{rowData.patientsPerDay}</p>)}
+                {rowData.patientsPerWeek!=null && (<p>{rowData.patientsPerWeek}</p>)}
+                {rowData.dailyHours!=null && (<p>{rowData.dailyHours}</p>)}
+                {rowData.weeklyHours!=null && (<p>{rowData.weeklyHours}</p>)}
+                <p>{compPerPatientFormatted(rowData)}</p>
+                <p>{compPerHourFormatted(rowData)}</p>
               </dd>
             </div>
           </dl>
@@ -185,73 +170,6 @@ const currencyBodyTemplate = (rowData) => {
         <div>
         </div>
       </div>
-
-      // <div>
-      //   <div className="px-5 sm:px-0 ">
-      //     {rowData.dailyRateAndBonus!=null && (<h3 className=" font-semibold leading-7 text-gray-900 pl-48">Contractor (1099)</h3>)}
-      //     {rowData.annualSalaryAndBonus!=null && (<h3 className=" font-semibold leading-7 text-gray-900 pl-48">Employed (W-2)</h3>)}
-      //   </div>
-      //   <div className="mt-6 pl-48">
-      //     <dl className="grid grid-cols-1 sm:grid-cols-4">
-      //       <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-      //         <dt className="text-sm font-medium leading-6 text-gray-900">
-      //           {rowData.dailyRateAndBonus!=null && (<p>Daily Pay with Bonus</p>)}
-      //           {rowData.annualSalaryAndBonus!=null && (<p>Annual Pay with Bonus</p>)}
-      //         </dt>
-      //         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-      //           {rowData.dailyRateAndBonus!=null && (<p>{rowData.dailyRateAndBonus}</p>)}
-      //           {rowData.annualSalaryAndBonus!=null && (<p>{rowData.annualSalaryAndBonus}</p>)}
-      //         </dd>
-      //       </div>
-      //       <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-      //         <dt className="text-sm font-medium leading-6 text-gray-900">Employer Annual Health Ins</dt>
-      //         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.healthInsuranceValue}</dd>
-      //       </div>
-      //       <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-      //         <dt className="text-sm font-medium leading-6 text-gray-900">Employer Annual Other Benefits</dt>
-      //         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.otherBenefitsValue}</dd>
-      //       </div>
-      //       <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-      //         <dt className="text-sm font-medium leading-6 text-gray-900">Paid Days Off</dt>
-      //         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.paidDaysOff}</dd>
-      //       </div>
-      //       <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-      //         <dt className="text-sm font-medium leading-6 text-gray-900">
-      //           {rowData.dailyHours!=null && (<p>Hours/Day</p>)}
-      //           {rowData.weeklyHours!=null && (<p>Hours/Week</p>)}
-      //         </dt>
-      //         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-      //           {rowData.dailyHours!=null && (<p>{rowData.dailyHours}</p>)}
-      //           {rowData.weeklyHours!=null && (<p>{rowData.weeklyHours}</p>)}
-      //         </dd>
-      //       </div>
-      //       <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-      //         <dt className="text-sm font-medium leading-6 text-gray-900">
-      //           {rowData.patientsPerDay!=null && (<p>Patients/Day</p>)}
-      //           {rowData.patientsPerWeek!=null && (<p>Patients/Week</p>)}
-      //         </dt>
-      //         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-      //           {rowData.patientsPerDay!=null && (<p>{rowData.patientsPerDay}</p>)}
-      //           {rowData.patientsPerWeek!=null && (<p>{rowData.patientsPerWeek}</p>)}
-      //         </dd>
-      //       </div>
-      //       <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-      //         <dt className="text-sm font-medium leading-6 text-gray-900">Total Comp/Patient</dt>
-      //         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.compPerPatient}</dd>
-      //       </div>
-      //       <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-      //         <dt className="text-sm font-medium leading-6 text-gray-900">Total Comp/Hour</dt>
-      //         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.compPerHour}</dd>
-      //       </div>
-      //       <div className="border-t border-gray-100 px-4 py-6 sm:col-span-4 sm:px-0">
-      //         <dt className="text-sm font-medium leading-6 text-gray-900">Comments</dt>
-      //         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-      //           {rowData.comments}
-      //         </dd>
-      //       </div>
-      //     </dl>
-      //   </div>
-      // </div>
     );
   };
 
@@ -389,7 +307,7 @@ const currencyBodyTemplate = (rowData) => {
                         <Column 
                         // className="px-3 py-3.5 text-left text-sm text-gray-900" 
                                 field="normalizedAnnualComp" 
-                                header="Standardized Annual Comp" 
+                                header="Annualized Total Comp" 
                                 sortable style={{ width: '20%' }}
                                 body={currencyBodyTemplate}
                                 ></Column>

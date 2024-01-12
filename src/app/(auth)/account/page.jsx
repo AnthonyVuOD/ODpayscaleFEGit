@@ -11,6 +11,7 @@ import { Footer } from "@/components/Footer";
 import { CurrencyService } from 'primereact/api';
 import { useState, useEffect, useRef } from "react";
 import { Button } from 'primereact/button';
+import { Formatting } from '@/components/Formatting';
 
 import "primereact/resources/themes/tailwind-light/theme.css";
 import 'primereact/resources/primereact.min.css';
@@ -20,6 +21,21 @@ import 'primeicons/primeicons.css';
 
 
 export default function Data() {
+
+
+// //NormalizedAnnualComp rounded to nearest dollar
+const { currencyBodyTemplate } = Formatting();
+const {healthInsuranceFormatted} = Formatting();
+const {otherBenefitsFormatted} = Formatting();
+const {paidDaysOffFormatted} = Formatting();
+const {compPerPatientFormatted} = Formatting();
+const {compPerHourFormatted} = Formatting();
+const {annualSalaryAndBonusFormatted} = Formatting()
+const {dailyRateAndBonusFormatted} = Formatting()
+const {annualizedDailyRateAndBonusFormatted} = Formatting()
+
+
+
 
 ////////API call to populate jobCollection data/////////////////
     const [jobCollection, setJobCollection] = useState([]);
@@ -45,21 +61,6 @@ export default function Data() {
     useEffect(()=>{
       fetchData();
     }, []);
-
-
-
-    //NormalizedAnnualComp rounded to nearest dollar
-    const currencyBodyTemplate = (rowData) => {
-      // Format the currency without decimal points
-      const formattedCurrency = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        maximumFractionDigits: 0,
-        }).format(rowData.normalizedAnnualComp);
-  
-      return <span>{formattedCurrency}</span>;
-    };
-  
 
 
 
@@ -140,17 +141,17 @@ export default function Data() {
                   {rowData.annualSalaryAndBonus!=null && (<p>Annual Pay with Bonus</p>)}
                 </dt>
                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                  {rowData.dailyRateAndBonus!=null && (<p>{rowData.dailyRateAndBonus}</p>)}
-                  {rowData.annualSalaryAndBonus!=null && (<p>{rowData.annualSalaryAndBonus}</p>)}
+                  {rowData.dailyRateAndBonus!=null && (<p>{dailyRateAndBonusFormatted(rowData)}</p>)}
+                  {rowData.annualSalaryAndBonus!=null && (<p>{annualSalaryAndBonusFormatted(rowData)}</p>)}
                 </dd>
               </div>
               <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">Employer Annual Health Ins</dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.healthInsuranceValue}</dd>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{healthInsuranceFormatted(rowData)}</dd>
               </div>
               <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">Employer Annual Other Benefits</dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.otherBenefitsValue}</dd>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{otherBenefitsFormatted(rowData)}</dd>
               </div>
               <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">Paid Days Off</dt>
@@ -178,11 +179,11 @@ export default function Data() {
               </div>
               <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">Total Comp/Patient</dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.compPerPatient}</dd>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{compPerPatientFormatted(rowData)}</dd>
               </div>
               <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">Total Comp/Hour</dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.compPerHour}</dd>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{compPerHourFormatted(rowData)}</dd>
               </div>
               <div className="border-t border-gray-100 px-4 py-6 sm:col-span-4 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">Comments</dt>
@@ -301,7 +302,7 @@ export default function Data() {
 
                         <Column 
                                 field="city" 
-                                header="City" 
+                                header="City/ County" 
                                 filterPlaceholder="Search" 
                                 showFilterMenu={false} 
                                 filter 
@@ -321,7 +322,7 @@ export default function Data() {
 
                         <Column 
                                 field="normalizedAnnualComp" 
-                                header="Standardized Annual Comp" 
+                                header="Annualized Total Comp" 
                                 body={currencyBodyTemplate}
                                 sortable 
                                 style={{ width: '20%' }}
