@@ -22,7 +22,7 @@ const faqs = [
     {
       question: 'Why should I use this platform?',
       answer:
-        "I believe this is the best way to share job salaries anonymously and to have access to accurate data. Not only will you be able to share important details of your compensation package, but I will provide other standardized statistics that will make it easier to compare with other compensation packages."
+        "I believe this is the most efficient way to share job salaries anonymously and to have access to accurate data. Not only will you be able to share important details of your compensation package, but I will provide other standardized metrics that will make it easier to compare with other compensation packages."
     },
     // {
     //   question: 'Where is Pocket based?',

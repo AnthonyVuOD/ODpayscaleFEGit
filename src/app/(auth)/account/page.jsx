@@ -39,10 +39,13 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
 
 ////////API call to populate jobCollection data/////////////////
     const [jobCollection, setJobCollection] = useState([]);
+    
+    const optometristId = 1;
+
 
     async function fetchData(){
       try {
-        const response = await fetch("http://localhost:8080/api/v1/jobs/getalljobs");
+        const response = await fetch(`http://localhost:8080/api/v1/jobs/getjobsbyoptometristid/${optometristId}`);
 
         if(response.ok){
           const data = await response.json();

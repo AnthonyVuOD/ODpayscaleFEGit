@@ -6,16 +6,9 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { DataTableFilterMeta, header, representativeBodyTemplate, representativeRowFilterTemplate, loading, filters, body, filterElement, expandedRows, onRowExpand, onRowCollapse, rowExpansionTemplate, allowExpansion } from "primereact/datatable";
 import { Footer } from "@/components/Footer";
-import { CurrencyService } from 'primereact/api';
 import { useState, useEffect } from "react";
 import { Formatting } from "@/components/Formatting";
-
-
-// import { React as ReactClient, useClient, unstable_useEffect as useEffect, useState as useStateClient } from "react";// import { useEffect, useClient } from "react";
-// import { Table } from "@/components/Table";
 import { Button } from 'primereact/button';
-// import { DataTableFilterMeta} from "primereact/datatable";
-// import 'primereact/resources/themes/saga-blue/theme.css'; // Choose a theme
 import "primereact/resources/themes/tailwind-light/theme.css";
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
@@ -92,34 +85,34 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
   const rowExpansionTemplate = (rowData) => {
     return (
       <div>
-        <div className="px-5 sm:px-0 ml-48">
-          <dl className="grid grid-cols-1 sm:grid-cols-4">
-            <div className="border-t border-gray-100 px-2 py-4 sm:col-span-1 sm:px-0 bg-slate-100 rounded">
+        <div className="px-5 sm:px-0 ml-36">
+          <dl className="grid grid-cols-1 sm:grid-cols-12">
+            <div className="border-t border-gray-100 px-2 py-4 sm:col-span-3 sm:px-0 bg-slate-100 rounded-l-md">
                <dd className="mt-1 text-sm leading-6 pl-10 text-gray-700 sm:mt-2">
                 {rowData.dailyRateAndBonus!=null && (<h3 className=" font-semibold leading-1 text-gray-900 inline-block">Contractor (1099)</h3>)}
                 {rowData.annualSalaryAndBonus!=null && (<h3 className=" font-semibold leading-1 text-gray-900 inline-block">Employed (W-2)</h3>)}
                </dd>
             </div>
-            <div className="border-t border-gray-100 px-2 py-4 sm:col-span-1 sm:px-0 bg-slate-100 rounded mr-1">
+            <div className="border-t border-gray-100 px-2 py-4 sm:col-span-3 sm:px-0 bg-slate-100 rounded-r-md mr-1">
                <dd className="mt-1 text-sm leading-6 text-right text-gray-700 sm:mt-2">
                {rowData.city !== "" ? (
-                  <h3 className="font-medium leading-7 text-gray-900 pr-1 inline-block">
+                  <h3 className="font-medium leading-1 text-gray-900 pr-1 inline-block">
                     {rowData.city},
                   </h3>
                 ) : (
-                  <h3 className="font-medium leading-7 text-gray-900 pr-1 inline-block">
+                  <h3 className="font-medium leading-1 text-gray-900 pr-1 inline-block">
                     No city specified,
                   </h3>
                 )}
-                <h3 className="font-medium leading-7 text-gray-900 pr-10 inline-block">{rowData.state}</h3>
+                <h3 className="font-medium leading-1 text-gray-900 pr-10 inline-block">{rowData.state}</h3>
                </dd>
             </div>
           </dl>
         </div>
 
-        <div className="mt-6 pl-48 	">
-          <dl className="grid grid-cols-1 sm:grid-cols-10 ">
-            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-3 sm:px-0 bg-slate-100 rounded-l-md">
+        <div className="mt-2 pl-36 	">
+          <dl className="grid grid-cols-1 sm:grid-cols-12 ">
+            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-4 sm:px-0 bg-slate-100 rounded-l-md">
               <dt className="text-sm  leading-relaxed pl-10 text-gray-900">
                 {rowData.dailyRateAndBonus!=null && (<p>Annualized Daily Rate ({dailyRateAndBonusFormatted(rowData)})</p>)}
                 {rowData.annualSalaryAndBonus!=null && (<p>Annual Salary and Bonus</p>)}
@@ -127,7 +120,7 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
                 <p>Other Benefits Value</p>
                 <p>{rowData.paidDaysOff} Days PTO Estimated Value</p>
                 <hr style={{ borderTop: '1px solid gray', margin: '2px 0'  }}/>
-                <p>Total Annual Compensation</p>
+                <p>Annualized Total Compensation</p>
               </dt>
             </div>
 
@@ -143,7 +136,7 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
               </dd>
             </div>
 
-            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-3 sm:px-0 bg-slate-100 ml-1 rounded-md">
+            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-3 sm:px-0 bg-slate-100 ml-1 rounded-l-md">
               <dt className="text-sm pl-10 leading-relaxed text-gray-900">
                 {rowData.patientsPerDay!=null && (<p>Patients/Day</p>)}
                 {rowData.patientsPerWeek!=null && (<p>Patients/Week</p>)}
@@ -154,7 +147,7 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
               </dt>
             </div>
 
-            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-2 sm:px-0 bg-slate-100 rounded-md">
+            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-3 sm:px-0 bg-slate-100 rounded-r-md">
               <dd className="text-sm font-medium pr-10 text-right leading-relaxed text-gray-900">
                 {rowData.patientsPerDay!=null && (<p>{rowData.patientsPerDay}</p>)}
                 {rowData.patientsPerWeek!=null && (<p>{rowData.patientsPerWeek}</p>)}
@@ -167,7 +160,23 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
           </dl>
         </div>
 
-        <div>
+        <div className="px-5 sm:px-0 ml-36">
+          <dl className="grid grid-cols-1 sm:grid-cols-10">
+            <div className="border-t border-gray-100 px-2 py-4 sm:col-span-10 sm:px-0 bg-slate-100 rounded-md mt-2">
+               <dd className="mt-1 text-sm leading-6 pl-10 text-gray-700 sm:mt-2">
+                <h3 className=" font-semibold leading-5 text-gray-900 inline-block">Comments:</h3>
+                {rowData.comments !== "" ? (
+                  <h3 className=" leading-5 text-gray-900 pr-1 ">
+                    {rowData.comments}
+                  </h3>
+                ) : (
+                  <h3 className=" leading-5 text-gray-900 pr-1 ">
+                    No comment given.
+                  </h3>
+                )}
+               </dd>
+            </div>
+          </dl>
         </div>
       </div>
     );

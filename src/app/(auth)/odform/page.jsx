@@ -21,6 +21,22 @@ import { useState } from 'react'
 
 export default function ODForm() {
 
+  ////Formatting to currency for "Debt" variable
+  const formatCurrency = (value) => {
+    // Remove non-numeric characters
+    const numericValue = value.replace(/[^0-9.]/g, '');
+
+    // Use Intl.NumberFormat to format as currency
+    const formattedValue = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD', // Change this based on your currency
+      maximumFractionDigits: 0,
+    }).format(numericValue);
+
+    return formattedValue;
+  };
+
+
   const [formData, setFormData] = useState({
     "yearGraduated": '',
     "initialDebt": '',
@@ -32,7 +48,13 @@ export default function ODForm() {
 
   function onInputChange(e){
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    const formattedValue = name === 'initialDebt' ? formatCurrency(value) : value;
+
+    setFormData({ 
+      ...formData, 
+      [name]: formattedValue
+    });
   }
 
   function createOptometristAccount(e){
@@ -87,6 +109,7 @@ export default function ODForm() {
                   name="yearGraduated"
                   type="text"
                   placeholder='XXXX'
+                  maxLength="4"
                   value={formData.yearGraduated}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
@@ -104,8 +127,7 @@ export default function ODForm() {
                   name="initialDebt"
                   type="text"
                   placeholder='Please answer in USD'
-                  // value={formData.initialDebt}
-                  
+                  value={formData.initialDebt}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                 />
