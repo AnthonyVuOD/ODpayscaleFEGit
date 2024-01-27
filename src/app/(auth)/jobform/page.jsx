@@ -4,6 +4,10 @@ import {UserCircleIcon, PhotoIcon } from '@heroicons/react/20/solid'
 import { useState } from 'react';
 import { Switch } from '@headlessui/react';
 import { RadioButton } from 'primereact/radiobutton';
+import { formatNumbersOnly } from '@/components/FormattingNumbersOnly';
+import { formatNumbersOnlyNoDecimals } from '@/components/FormattingNumbersOnlyNoDecimals';
+import { formatCurrency } from '@/components/FormattingCurrency';
+import { removeNonNumericCharacters } from '@/components/RemoveNonNumericaCharacters';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -11,21 +15,24 @@ function classNames(...classes) {
 
 export default function JobForm (){
 
-    ////Formatting to currency for user inputs
-    const formatCurrency = (value) => {
-        // Remove non-numeric characters
-        const numericValue = value.replace(/[^0-9.]/g, '');
+    // ////Formatting to currency for user inputs
+    // const formatCurrency = (value) => {
+    //     // Remove non-numeric characters
+    //     const numericValue = value.replace(/[^0-9.]/g, '');
     
-        // Use Intl.NumberFormat to format as currency
-        const formattedValue = new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD', // Change this based on your currency
-        //   minimumFractionDigits: 2,
-          maximumFractionDigits: 0,
-        }).format(numericValue);
+    //     // Use Intl.NumberFormat to format as currency
+    //     const formattedValue = new Intl.NumberFormat('en-US', {
+    //       style: 'currency',
+    //       currency: 'USD', // Change this based on your currency
+    //     //   minimumFractionDigits: 2,
+    //       maximumFractionDigits: 0,
+    //     }).format(numericValue);
     
-        return formattedValue;
-      };
+    //     return formattedValue;
+    //   };
+
+
+
 
 
     
@@ -45,15 +52,51 @@ export default function JobForm (){
         "dailyHours": '',
         "patientsPerDay": ''
     });
+
+    const [contractorFormDataSend, setContractorFormDataSend] = useState({
+        "optometristId":'1',
+        "year" : '',
+        "state" : 'Alabama',
+        "city": '',
+        "practiceMode": 'Private Practice',
+        "setting" : "Urban",
+        "paidDaysOff" : '',
+        "healthInsuranceValue" : '',
+        "otherBenefitsValue" : '',
+        "comments": '',
+        "dailyRateAndBonus": '',
+        "dailyHours": '',
+        "patientsPerDay": ''
+    });
     
     function onContractorInputChange(e){
         const { name, value } = e.target;
 
-        const formattedValue = name === 'healthInsuranceValue'||name === 'dailyRateAndBonus'||name === 'otherBenefitsValue' ? formatCurrency(value) : value;
+        let formattedValue;
+
+        if(name === 'healthInsuranceValue'||name === 'dailyRateAndBonus'||name === 'otherBenefitsValue') {
+          formattedValue = formatCurrency(value);
+        }
+        else if (name === 'paidDaysOff'||name === 'dailyHours'||name === 'patientsPerDay') {
+          formattedValue = formatNumbersOnly(value);
+        }
+        else if (name === 'year') {
+            formattedValue = formatNumbersOnlyNoDecimals(value);
+          }
+        else {
+          // No formatting for other fields
+          formattedValue = value;
+        }
 
         setContractorFormData({ 
             ...contractorFormData,
             [name]: formattedValue
+        });
+
+        setContractorFormDataSend({ 
+            ...contractorFormDataSend,
+            [name]: (name === 'healthInsuranceValue'||name === 'dailyRateAndBonus'||name === 'otherBenefitsValue') ? removeNonNumericCharacters(value) : value
+
         });
     }
 
@@ -66,7 +109,7 @@ export default function JobForm (){
             'Content-Type': 'application/json',
             // Add any additional headers if needed
             },
-            body: JSON.stringify(contractorFormData)})
+            body: JSON.stringify(contractorFormDataSend)})
         
         .then((response)=>response.text())
         .then((responseText)=>{
@@ -77,7 +120,7 @@ export default function JobForm (){
         })
 
         console.log("Hello smello");
-        window.location.href = '/account';
+        // window.location.href = '/account';
     };
 
     //W2 Job Form functions and variables
@@ -96,15 +139,52 @@ export default function JobForm (){
         "weeklyHours": '',
         "patientsPerWeek": ''
       });
+
+      const [w2FormDataSend, setW2FormDataSend] = useState({
+        "optometristId":'1',
+        "year" : '',
+        "state" : 'Alabama',
+        "city": '',
+        "practiceMode": 'Private Practice',
+        "setting" : "Urban",
+        "paidDaysOff" : '',
+        "healthInsuranceValue" : '',
+        "otherBenefitsValue" : '',
+        "comments": '',
+        "annualSalaryAndBonus": '',
+        "weeklyHours": '',
+        "patientsPerWeek": ''
+      });
     
     function onW2InputChange(e){
         const { name, value } = e.target;
 
-        const formattedValue = name === 'healthInsuranceValue'||name === 'annualSalaryAndBonus'||name === 'otherBenefitsValue' ? formatCurrency(value) : value;
+        // const formattedValue = name === 'healthInsuranceValue'||name === 'annualSalaryAndBonus'||name === 'otherBenefitsValue' ? formatCurrency(value) : value;
+
+        let formattedValue;
+
+        if(name === 'healthInsuranceValue'||name === 'annualSalaryAndBonus'||name === 'otherBenefitsValue') {
+          formattedValue = formatCurrency(value);
+        }
+        else if (name === 'paidDaysOff'||name === 'weeklyHours'||name === 'patientsPerWeek') {
+          formattedValue = formatNumbersOnly(value);
+        }
+        else if (name === 'year') {
+            formattedValue = formatNumbersOnlyNoDecimals(value);
+        }
+        else {
+          // No formatting for other fields
+          formattedValue = value;
+        }
 
         setW2FormData({ 
             ...w2FormData, 
             [name]: formattedValue, 
+        });
+
+        setW2FormDataSend({ 
+            ...w2FormDataSend,
+            [name]: (name === 'healthInsuranceValue'||name === 'annualSalaryAndBonus'||name === 'otherBenefitsValue') ? removeNonNumericCharacters(value) : value
         });
     }
 
@@ -119,7 +199,7 @@ export default function JobForm (){
             'Content-Type': 'application/json',
             // Add any additional headers if needed
             },
-            body: JSON.stringify(w2FormData)})
+            body: JSON.stringify(w2FormDataSend)})
         
         .then((response)=>response.text())
         .then((responseText)=>{
@@ -130,42 +210,42 @@ export default function JobForm (){
         })
 
         console.log("Hello smello");
-        window.location.href = '/account';
+        // window.location.href = '/account';
     };
 
 
     return (
         <Container>
             <div className="space-y-12">
-                <div className="border-b border-gray-900/10 pb-12">
+                <div className="border-b border-gray-900/10 pb-12 sm:max-w-lg">
                     <br />
                     <br />
                     <h1 className="mt-1 text-lg leading-6 text-gray-600">
                         Add new salary data:
                     </h1>
                     <br />
-                    <p className="mt-1 text-sm leading-6 text-gray-600">
+                    <p className="mt-1 text-sm leading-6 text-gray-600 ">
                         Is this an employed job (W-2) or an independent contractor job (1099)?
                     </p>
                     <br />
                     <fieldset>
-                        <input id="w2" class="peer/w2" type="radio" name="status"/>
-                        <label for="w2" class="peer-checked/draft:text-cyan-500 pr-10 pl-2 mt-1 text-sm leading-6 text-gray-600">W-2 Employed</label>
+                        <input id="w2" className="peer/w2" type="radio" name="status"/>
+                        <label htmlFor="w2" className="peer-checked/draft:text-cyan-500 pr-10 pl-2 mt-1 text-sm leading-6 text-gray-600">W-2 Employed</label>
 
-                        <input id="1099" class="peer/1099" type="radio" name="status" />
-                        <label for="1099" class="peer-checked/published:text-cyan-500 pr-10 pl-2 mt-1 text-sm leading-6 text-gray-600">1099 Independent Contractor</label>
+                        <input id="1099" className="peer/1099" type="radio" name="status" />
+                        <label htmlFor="1099" className="peer-checked/published:text-cyan-500 pr-10 pl-2 mt-1 text-sm leading-6 text-gray-600">1099 Independent Contractor</label>
 
-                        <div class="hidden peer-checked/w2:block">
+                        <div className="hidden peer-checked/w2:block">
                             <br />
                             <hr />
                             <br />
 
                             <form onSubmit={createW2Job}>
-                                <div className="border-b border-gray-900/10 pb-12">
+                                <div className="border-b border-gray-900/10 pb-12 ">
                                     <h2 className="text-base font-semibold leading-7 text-gray-900">
                                         W-2 Employed Job Salary Details
                                     </h2>
-                                    <p className="mt-1 text-sm leading-6 text-gray-600">
+                                    <p className="mt-1 text-sm leading-6 text-gray-600 ">
                                         Please answer a few questions about your employed salary:
                                     </p>
 
@@ -184,7 +264,7 @@ export default function JobForm (){
                                                 onChange={onW2InputChange}
                                                 placeholder='XXXX'
                                                 maxLength="4"
-                                                pattern="[0-9]{4}"
+                                                pattern="[0-9]{0,4}"
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                                                 />
                                             </div>
@@ -341,7 +421,7 @@ export default function JobForm (){
                                                 id="annualSalaryAndBonus"
                                                 value={w2FormData.annualSalaryAndBonus}
                                                 onChange={onW2InputChange}
-                                                placeholder='XXX,XXX'
+                                                placeholder='$'
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                                                 />
                                             </div>
@@ -392,8 +472,6 @@ export default function JobForm (){
                                                 id="paidDaysOff"
                                                 value={w2FormData.paidDaysOff}
                                                 onChange={onW2InputChange}
-                                                maxLength="4"
-                                                pattern="[0-9]{4}"
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                                                 />
                                             </div>
@@ -410,8 +488,6 @@ export default function JobForm (){
                                                 id="weeklyHours"
                                                 value={w2FormData.weeklyHours}
                                                 onChange={onW2InputChange}
-                                                maxLength="4"
-                                                pattern="[0-9]{4}"
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                                                 />
                                             </div>
@@ -428,8 +504,6 @@ export default function JobForm (){
                                                 id="patientsPerWeek"
                                                 value={w2FormData.patientsPerWeek}
                                                 onChange={onW2InputChange}
-                                                maxLength="4"
-                                                pattern="[0-9]{4}"
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                                                 />
                                             </div>
@@ -478,7 +552,7 @@ export default function JobForm (){
 
 
 
-                        <div class="hidden peer-checked/1099:block">
+                        <div className="hidden peer-checked/1099:block">
                             <br />
                             <hr />
                             <br />
@@ -661,7 +735,7 @@ export default function JobForm (){
                                                 type="text"
                                                 name="dailyRateAndBonus"
                                                 id="dailyRateAndBonus"
-                                                placeholder='XXX'
+                                                placeholder='$'
                                                 value={contractorFormData.dailyRateAndBonus}
                                                 onChange={onContractorInputChange}
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
@@ -714,8 +788,6 @@ export default function JobForm (){
                                                 id="paidDaysOff"
                                                 value={contractorFormData.paidDaysOff}
                                                 onChange={onContractorInputChange}
-                                                maxLength="4"
-                                                pattern="[0-9]{4}"
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                                                 />
                                             </div>
@@ -732,8 +804,6 @@ export default function JobForm (){
                                                 id="dailyHours"
                                                 value={contractorFormData.dailyHours}
                                                 onChange={onContractorInputChange}
-                                                maxLength="4"
-                                                pattern="[0-9]{4}"
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                                                 />
                                             </div>
@@ -750,8 +820,6 @@ export default function JobForm (){
                                                 id="patientsPerDay"
                                                 value={contractorFormData.patientsPerDay}
                                                 onChange={onContractorInputChange}
-                                                maxLength="4"
-                                                pattern="[0-9]{4}"
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                                                 />
                                             </div>
@@ -769,7 +837,7 @@ export default function JobForm (){
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                                                 value={contractorFormData.comments}
                                                 onChange={onContractorInputChange}
-                                                maxlength="250"
+                                                maxLength="250"
                                                 placeholder='Please include other salary details or leave this blank. Helpful information would include bonus structure, revenue collected, weekends, etc.'
                                                 />
                                                <p className="text-right block text-xs font-small leading-6 text-gray-900">Max character count: {contractorFormData.comments.length}/250</p> 

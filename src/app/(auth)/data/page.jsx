@@ -7,7 +7,7 @@ import { Column } from 'primereact/column';
 import { DataTableFilterMeta, header, representativeBodyTemplate, representativeRowFilterTemplate, loading, filters, body, filterElement, expandedRows, onRowExpand, onRowCollapse, rowExpansionTemplate, allowExpansion } from "primereact/datatable";
 import { Footer } from "@/components/Footer";
 import { useState, useEffect } from "react";
-import { Formatting } from "@/components/Formatting";
+import { Formatting, FormattingRenders } from "@/components/FormattingRenders";
 import { Button } from 'primereact/button';
 import "primereact/resources/themes/tailwind-light/theme.css";
 import 'primereact/resources/primereact.min.css';
@@ -46,16 +46,21 @@ export default function Data() {
       fetchData();
     }, []);
 
-// ////formatting of currency //////
-const { currencyBodyTemplate } = Formatting();
-const {healthInsuranceFormatted} = Formatting();
-const {otherBenefitsFormatted} = Formatting();
-const {paidDaysOffFormatted} = Formatting();
-const {compPerPatientFormatted} = Formatting();
-const {compPerHourFormatted} = Formatting();
-const {annualSalaryAndBonusFormatted} = Formatting()
-const {dailyRateAndBonusFormatted} = Formatting()
-const {annualizedDailyRateAndBonusFormatted} = Formatting()
+// ////formatting of rendered data //////
+const { currencyBodyTemplate } = FormattingRenders();
+const {healthInsuranceFormatted} = FormattingRenders();
+const {otherBenefitsFormatted} = FormattingRenders();
+const {paidDaysOffValueFormatted} = FormattingRenders();
+const {compPerPatientFormatted} = FormattingRenders();
+const {compPerHourFormatted} = FormattingRenders();
+const {annualSalaryAndBonusFormatted} = FormattingRenders()
+const {dailyRateAndBonusFormatted} = FormattingRenders()
+const {annualizedDailyRateAndBonusFormatted} = FormattingRenders()
+const {paidDaysOffFormatted} = FormattingRenders();
+const {patientsPerDayFormatted} = FormattingRenders();
+const {patientsPerWeekFormatted} = FormattingRenders();
+const {dailyHoursFormatted} = FormattingRenders();
+const {weeklyHoursFormatted} = FormattingRenders();
 
 
 
@@ -85,10 +90,10 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
   const rowExpansionTemplate = (rowData) => {
     return (
       <div>
-        <div className="px-5 sm:px-0 ml-36">
-          <dl className="grid grid-cols-1 sm:grid-cols-12">
-            <div className="border-t border-gray-100 px-2 py-4 sm:col-span-3 sm:px-0 bg-slate-100 rounded-l-md">
-               <dd className="mt-1 text-sm leading-6 pl-10 text-gray-700 sm:mt-2">
+        <div className="px-5 sm:px-0 ml-14">
+          <dl className="grid grid-cols-2 sm:grid-cols-10">
+            <div className="border-t border-gray-100 px-2 py-4 sm:col-span-2 sm:px-0 bg-slate-100 rounded-l-md">
+               <dd className="mt-1 text-sm leading-6 pl-9 sm:pl-7 pb-2 text-gray-700 sm:mt-2">
                 {rowData.dailyRateAndBonus!=null && (<h3 className=" font-semibold leading-1 text-gray-900 inline-block">Contractor (1099)</h3>)}
                 {rowData.annualSalaryAndBonus!=null && (<h3 className=" font-semibold leading-1 text-gray-900 inline-block">Employed (W-2)</h3>)}
                </dd>
@@ -96,48 +101,47 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
             <div className="border-t border-gray-100 px-2 py-4 sm:col-span-3 sm:px-0 bg-slate-100 rounded-r-md mr-1">
                <dd className="mt-1 text-sm leading-6 text-right text-gray-700 sm:mt-2">
                {rowData.city !== "" ? (
-                  <h3 className="font-medium leading-1 text-gray-900 pr-1 inline-block">
-                    {rowData.city},
+                  <h3 className="font-medium leading-1 text-gray-900 pr-9 sm:pr-7 inline-block">
+                    {rowData.city}, {rowData.state}
                   </h3>
                 ) : (
-                  <h3 className="font-medium leading-1 text-gray-900 pr-1 inline-block">
-                    No city specified,
+                  <h3 className="font-medium leading-1 text-gray-900 pr-9 sm:pr-7 inline-block">
+                    No city specified, {rowData.state}
                   </h3>
                 )}
-                <h3 className="font-medium leading-1 text-gray-900 pr-10 inline-block">{rowData.state}</h3>
                </dd>
             </div>
           </dl>
         </div>
 
-        <div className="mt-2 pl-36 	">
-          <dl className="grid grid-cols-1 sm:grid-cols-12 ">
+        <div className="px-5 sm:px-0 mt-2 ml-14">
+          <dl className="grid grid-cols-2 sm:grid-cols-12 ">
             <div className="border-t border-gray-100 px-4 py-6 sm:col-span-4 sm:px-0 bg-slate-100 rounded-l-md">
-              <dt className="text-sm  leading-relaxed pl-10 text-gray-900">
-                {rowData.dailyRateAndBonus!=null && (<p>Annualized Daily Rate ({dailyRateAndBonusFormatted(rowData)})</p>)}
+              <dt className="text-sm  leading-relaxed pl-7 text-gray-900">
+                {rowData.dailyRateAndBonus!=null && (<p>Annualized Daily Pay ({dailyRateAndBonusFormatted(rowData)})</p>)}
                 {rowData.annualSalaryAndBonus!=null && (<p>Annual Salary and Bonus</p>)}
                 <p>Health Insurance Value</p>
                 <p>Other Benefits Value</p>
-                <p>{rowData.paidDaysOff} Days PTO Estimated Value</p>
+                <p>{paidDaysOffFormatted(rowData)} Days PTO Estimated Value</p>
                 <hr style={{ borderTop: '1px solid gray', margin: '2px 0'  }}/>
                 <p>Annualized Total Compensation</p>
               </dt>
             </div>
 
             <div className="border-t border-gray-100 px-4 py-6 sm:col-span-2 sm:px-0 bg-slate-100 rounded-r-md mr-1">
-              <dd className="text-sm leading-relaxed font-medium text-right pr-10 text-gray-900">
+              <dd className="text-sm leading-relaxed font-medium text-right pr-7 text-gray-900">
                 {rowData.dailyRateAndBonus!=null && (<p>{annualizedDailyRateAndBonusFormatted(rowData)}</p>)}
                 {rowData.annualSalaryAndBonus!=null && (<p>{annualSalaryAndBonusFormatted(rowData)}</p>)}
                 <p>{healthInsuranceFormatted(rowData)}</p>
                 <p>{otherBenefitsFormatted(rowData)}</p>
-                <p>{paidDaysOffFormatted(rowData)}</p>
+                <p>{paidDaysOffValueFormatted(rowData)}</p>
                 <hr style={{ borderTop: '1px solid gray', margin: '2px 0'  }}/>
                 <p>{currencyBodyTemplate(rowData)}</p>
               </dd>
             </div>
 
-            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-3 sm:px-0 bg-slate-100 ml-1 rounded-l-md">
-              <dt className="text-sm pl-10 leading-relaxed text-gray-900">
+            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-3 mt-2 sm:mt-0 sm:px-0 bg-slate-100 sm:ml-1 rounded-l-md">
+              <dt className="text-sm pl-7 leading-relaxed text-gray-900">
                 {rowData.patientsPerDay!=null && (<p>Patients/Day</p>)}
                 {rowData.patientsPerWeek!=null && (<p>Patients/Week</p>)}
                 {rowData.dailyHours!=null && (<p>Hours/Day</p>)}
@@ -147,12 +151,12 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
               </dt>
             </div>
 
-            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-3 sm:px-0 bg-slate-100 rounded-r-md">
-              <dd className="text-sm font-medium pr-10 text-right leading-relaxed text-gray-900">
-                {rowData.patientsPerDay!=null && (<p>{rowData.patientsPerDay}</p>)}
-                {rowData.patientsPerWeek!=null && (<p>{rowData.patientsPerWeek}</p>)}
-                {rowData.dailyHours!=null && (<p>{rowData.dailyHours}</p>)}
-                {rowData.weeklyHours!=null && (<p>{rowData.weeklyHours}</p>)}
+            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-2 mt-2 sm:mt-0 sm:px-0 mr-1 bg-slate-100 rounded-r-md">
+              <dd className="text-sm font-medium pr-7 text-right leading-relaxed text-gray-900">
+                {rowData.patientsPerDay!=null && (<p>{patientsPerDayFormatted(rowData)}</p>)}
+                {rowData.patientsPerWeek!=null && (<p>{patientsPerWeekFormatted(rowData)}</p>)}
+                {rowData.dailyHours!=null && (<p>{dailyHoursFormatted(rowData)}</p>)}
+                {rowData.weeklyHours!=null && (<p>{weeklyHoursFormatted(rowData)}</p>)}
                 <p>{compPerPatientFormatted(rowData)}</p>
                 <p>{compPerHourFormatted(rowData)}</p>
               </dd>
@@ -160,17 +164,17 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
           </dl>
         </div>
 
-        <div className="px-5 sm:px-0 ml-36">
-          <dl className="grid grid-cols-1 sm:grid-cols-10">
-            <div className="border-t border-gray-100 px-2 py-4 sm:col-span-10 sm:px-0 bg-slate-100 rounded-md mt-2">
-               <dd className="mt-1 text-sm leading-6 pl-10 text-gray-700 sm:mt-2">
-                <h3 className=" font-semibold leading-5 text-gray-900 inline-block">Comments:</h3>
+        <div className="px-5 sm:px-0 ml-14">
+          <dl className="grid grid-cols-1 sm:grid-cols-12">
+            <div className="border-t border-gray-100 px-2 py-4 sm:col-span-11 sm:px-0 mr-1 bg-slate-100 rounded-md mt-2">
+               <dd className="mt-1 text-sm leading-6 sm:pl-7 pr-7 pb-3 pl-9 text-gray-700 sm:mt-2">
+                <h3 className=" font-semibold leading-6 text-gray-900 inline-block">Comments:</h3>
                 {rowData.comments !== "" ? (
-                  <h3 className=" leading-5 text-gray-900 pr-1 ">
+                  <h3 className=" leading-6 text-gray-900 pr-1 ">
                     {rowData.comments}
                   </h3>
                 ) : (
-                  <h3 className=" leading-5 text-gray-900 pr-1 ">
+                  <h3 className=" leading-6 text-gray-900 pr-1 ">
                     No comment given.
                   </h3>
                 )}

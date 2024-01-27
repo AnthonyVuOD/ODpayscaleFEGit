@@ -11,7 +11,7 @@ import { Footer } from "@/components/Footer";
 import { CurrencyService } from 'primereact/api';
 import { useState, useEffect, useRef } from "react";
 import { Button } from 'primereact/button';
-import { Formatting } from '@/components/Formatting';
+import { FormattingRenders } from '@/components/FormattingRenders';
 
 import "primereact/resources/themes/tailwind-light/theme.css";
 import 'primereact/resources/primereact.min.css';
@@ -23,16 +23,22 @@ import 'primeicons/primeicons.css';
 export default function Data() {
 
 
-// //NormalizedAnnualComp rounded to nearest dollar
-const { currencyBodyTemplate } = Formatting();
-const {healthInsuranceFormatted} = Formatting();
-const {otherBenefitsFormatted} = Formatting();
-const {paidDaysOffFormatted} = Formatting();
-const {compPerPatientFormatted} = Formatting();
-const {compPerHourFormatted} = Formatting();
-const {annualSalaryAndBonusFormatted} = Formatting()
-const {dailyRateAndBonusFormatted} = Formatting()
-const {annualizedDailyRateAndBonusFormatted} = Formatting()
+// Formatting rendered data
+const { currencyBodyTemplate } = FormattingRenders();
+const {healthInsuranceFormatted} = FormattingRenders();
+const {otherBenefitsFormatted} = FormattingRenders();
+const {paidDaysOffValueFormatted} = FormattingRenders();
+const {compPerPatientFormatted} = FormattingRenders();
+const {compPerHourFormatted} = FormattingRenders();
+const {annualSalaryAndBonusFormatted} = FormattingRenders()
+const {dailyRateAndBonusFormatted} = FormattingRenders()
+const {annualizedDailyRateAndBonusFormatted} = FormattingRenders()
+const {paidDaysOffFormatted} = FormattingRenders();
+const {patientsPerDayFormatted} = FormattingRenders();
+const {patientsPerWeekFormatted} = FormattingRenders();
+const {dailyHoursFormatted} = FormattingRenders();
+const {weeklyHoursFormatted} = FormattingRenders();
+
 
 
 
@@ -83,7 +89,7 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
 
     //delete button function ---> still needs to be updated to MySQL
     function deleteJob(jobId){
-      const apiDeleteUrl = `http://localhost:8080/api/v1/jobs/deletejob/${jobId}`;
+      const apiDeleteUrl = `http://localhost:8080/api/v1/jobs/deletesinglejob/1`;
       fetch(apiDeleteUrl,{
         method:'DELETE',
         headers:{
@@ -133,10 +139,10 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
       return (
         <div>
           <div className="px-5 sm:px-0 ">
-            {rowData.dailyRateAndBonus!=null && (<h3 className=" font-semibold leading-7 text-gray-900 pl-48">Contractor (1099)</h3>)}
-            {rowData.annualSalaryAndBonus!=null && (<h3 className=" font-semibold leading-7 text-gray-900 pl-48">Employed (W-2)</h3>)}
+            {rowData.dailyRateAndBonus!=null && (<h3 className=" font-semibold leading-7 text-gray-900 pl-20">Contractor (1099)</h3>)}
+            {rowData.annualSalaryAndBonus!=null && (<h3 className=" font-semibold leading-7 text-gray-900 pl-20">Employed (W-2)</h3>)}
           </div>
-          <div className="mt-6 pl-48">
+          <div className="mt-6 pl-20">
             <dl className="grid grid-cols-1 sm:grid-cols-4">
               <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">
@@ -158,7 +164,7 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
               </div>
               <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">Paid Days Off</dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{rowData.paidDaysOff}</dd>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{paidDaysOffFormatted(rowData)}</dd>
               </div>
               <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">
@@ -166,8 +172,8 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
                   {rowData.weeklyHours!=null && (<p>Hours/Week</p>)}
                 </dt>
                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                  {rowData.dailyHours!=null && (<p>{rowData.dailyHours}</p>)}
-                  {rowData.weeklyHours!=null && (<p>{rowData.weeklyHours}</p>)}
+                  {rowData.dailyHours!=null && (<p>{dailyHoursFormatted(rowData)}</p>)}
+                  {rowData.weeklyHours!=null && (<p>{weeklyHoursFormatted(rowData)}</p>)}
                 </dd>
               </div>
               <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
@@ -176,8 +182,8 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
                   {rowData.patientsPerWeek!=null && (<p>Patients/Week</p>)}
                 </dt>
                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                  {rowData.patientsPerDay!=null && (<p>{rowData.patientsPerDay}</p>)}
-                  {rowData.patientsPerWeek!=null && (<p>{rowData.patientsPerWeek}</p>)}
+                  {rowData.patientsPerDay!=null && (<p>{patientsPerDayFormatted(rowData)}</p>)}
+                  {rowData.patientsPerWeek!=null && (<p>{patientsPerWeekFormatted(rowData)}</p>)}
                 </dd>
               </div>
               <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
@@ -218,13 +224,13 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
               </div>
               <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                 <a
-                  
+                  href='/deleteaccount'
                   className="inline-block rounded-md bg-red-400 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700"
                 >
                   Delete Account
                 </a>
                 <a
-                  // type="button"
+                  href='/odformupdate'
                   className="inline-block rounded-md bg-cyan-500 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Update Account
@@ -284,7 +290,7 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
 
                         <Column 
                                 expander={allowExpansion}
-                                style={{ width: '5%' }}
+                                style={{ width: '3%' }}
                                 >
                                 </Column>
                                 
@@ -300,7 +306,7 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
                                 filterPlaceholder="Search"
                                 showFilterMenu={false} 
                                 filter 
-                                style={{ width: '15%' }}
+                                style={{ width: '10%' }}
                                 ></Column>
 
                         <Column 
@@ -309,7 +315,7 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
                                 filterPlaceholder="Search" 
                                 showFilterMenu={false} 
                                 filter 
-                                style={{ width: '15%' }}
+                                style={{ width: '10%' }}
                                 ></Column>
 
                         <Column 
@@ -328,12 +334,12 @@ const {annualizedDailyRateAndBonusFormatted} = Formatting()
                                 header="Annualized Total Comp" 
                                 body={currencyBodyTemplate}
                                 sortable 
-                                style={{ width: '20%' }}
+                                style={{ width: '15%' }}
                                 ></Column>
 
                         <Column 
                                 body={deleteTemplate}
-                                style={{ width: '5%' }}
+                                style={{ width: '10%' }}
                                 ></Column>  
                     </DataTable>
 

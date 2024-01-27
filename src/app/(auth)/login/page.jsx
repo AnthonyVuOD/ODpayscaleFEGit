@@ -5,6 +5,7 @@ import { AuthLayout } from '@/components/AuthLayout'
 import { Button } from '@/components/Button'
 import { TextField } from '@/components/Fields'
 import axios from 'axios'
+import { Footer } from '@/components/Footer'
 
 // export const metadata = {
 //   title: 'Sign In',
@@ -24,6 +25,7 @@ export default function Login() {
 
 
   return (
+    <>
     <AuthLayout
       title="Sign in with your Facebook or Google account!"
       subtitle={
@@ -60,12 +62,23 @@ export default function Login() {
         <Button 
           type="submit" 
           color="cyan" 
-          className="mt-8 w-full"
+          className="mt-0 w-full"
           onClick={handleGoogleLogin}
           >
             Sign in with Google account
         </Button>
+
+
+        <Button 
+          type="submit" 
+          color="cyan" 
+          className="mt-8 w-full"
+          onClick={handleGoogleLogin}
+          >
+            Sign in with Facebook account
+        </Button>
       </form>
     </AuthLayout>
+    </>
   )
 }

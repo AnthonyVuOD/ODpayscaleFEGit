@@ -22,7 +22,7 @@ const faqs = [
     {
       question: 'Why should I use this platform?',
       answer:
-        "I believe this is the most efficient way to share job salaries anonymously and to have access to accurate data. Not only will you be able to share important details of your compensation package, but I will provide other standardized metrics that will make it easier to compare with other compensation packages."
+        "I believe this is the most efficient way to share job salaries anonymously and to have access to accurate data. Not only will you be able to share important details of your compensation package, but I will provide other standardized metrics that give context and will make it easier to compare with other compensation packages."
     },
     // {
     //   question: 'Where is Pocket based?',
@@ -39,7 +39,7 @@ const faqs = [
     {
       question: 'Why are you doing this?',
       answer:
-        "As you may know, not only is it difficult to share salaries anonymously, but it is also frowned upon. Due to these hurdles, fair OD compensation is difficult to determine, which leads to a disadvantage when negotiating your salary. With transparency in salaries, you are more likely to earn a fair wage and be happy with your career."
+        "As you may know, not only is it difficult to share salaries, but it is also frowned upon. Due to these hurdles, fair OD compensation is difficult to determine, which leads to a disadvantage when negotiating your salary. With transparency in salaries, you are more likely to earn a fair wage and be happy with your career."
     },
     // {
     //   question: 'How do I explain the money I withdraw from Pocket to the IRS?',
@@ -74,7 +74,7 @@ export function Faqs() {
               href="mailto:AnthonyVuOD@gmail.com"
               className="text-gray-900 underline"
             >
-              reach out to me
+              please reach out to me
             </a>
             .
           </p>
