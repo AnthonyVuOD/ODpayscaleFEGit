@@ -10,21 +10,6 @@ import { removeNonNumericCharacters } from '@/components/RemoveNonNumericaCharac
 
 export default function ODFormUpdate() {
 
-  // ////Formatting to currency for "Debt" variable
-  // const formatCurrency = (value) => {
-  //   // Remove non-numeric characters
-  //   const numericValue = value.replace(/[^0-9.]/g, '');
-
-  //   // Use Intl.NumberFormat to format as currency
-  //   const formattedValue = new Intl.NumberFormat('en-US', {
-  //     style: 'currency',
-  //     currency: 'USD', // Change this based on your currency
-  //     maximumFractionDigits: 0,
-  //   }).format(numericValue);
-
-  //   return formattedValue;
-  // };
-
   //initialize formData variables
   const [formDataUpdate, setFormDataUpdate] = useState({
       "yearGraduated": '',
@@ -47,7 +32,7 @@ export default function ODFormUpdate() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/v1/optometrists/getsingleoptometrist/1");
+        const response = await fetch("http://localhost:8080/api/v1/optometrists/getsingleoptometrist/4");
         const formDataUpdate = await response.json();
         // Update state with user data
         setFormDataUpdate(formDataUpdate);
@@ -92,13 +77,13 @@ export default function ODFormUpdate() {
   function updateOptometristAccount(e){
     e.preventDefault();
 
-    fetch("http://localhost:8080/api/v1/optometrists/updateoptometrist/1",{
+    fetch("http://localhost:8080/api/v1/optometrists/updateoptometrist/4",{
       method:"PUT",
       headers: {
         'Content-Type': 'application/json',
         // Add any additional headers if needed
       },
-      body: JSON.stringify(formDataUpdate)})
+      body: JSON.stringify(formDataUpdateSend)})
     
     .then((response)=>response.text())
     .then((responseText)=>{

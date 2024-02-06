@@ -17,7 +17,7 @@ export function CallToAction() {
             Get valuable information in an instant.
           </h2>
           <p className="mt-4 text-lg text-gray-300">
-            You have free access to data and providing data is as easy as signing in with your Facebook or Google account. The more OD participation, the more compensation transparency in our industry.
+            You have free access to data and providing data is as easy as creating or signing into your account. The more OD participation, the more compensation transparency in our industry.
           </p>
           {/* <div className="mt-8 flex justify-center">
             <AppStoreLink color="white" />

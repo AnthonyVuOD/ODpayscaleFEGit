@@ -20,7 +20,7 @@ export default function DeleteAccount() {
     console.log ("Deleted");
 
     // fetch(`http://example.com/api/users/${userId}`, {
-    fetch("http://localhost:8080/api/v1/optometrists/deletesingleoptometrist/6", {
+    fetch("http://localhost:8080/api/v1/optometrists/deletesingleoptometrist/13", {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

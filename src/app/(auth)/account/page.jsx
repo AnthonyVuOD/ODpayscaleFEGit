@@ -1,45 +1,43 @@
 'use client'
 
-import { PaperClipIcon } from '@heroicons/react/20/solid'
-import { Container } from "@/components/Container"
 import { Header } from "@/components/Header"
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { Tag } from "primereact/tag";
-import { Toast } from "primereact/toast";
 import { Footer } from "@/components/Footer";
-import { CurrencyService } from 'primereact/api';
 import { useState, useEffect, useRef } from "react";
-import { Button } from 'primereact/button';
 import { FormattingRenders } from '@/components/FormattingRenders';
+import { rowExpansionTemplate } from '@/components/DataExpansionTemplate';
+
+// import { Tag } from "primereact/tag";
+// import { Toast } from "primereact/toast";
+// import { Button } from 'primereact/button';
+// import { CurrencyService } from 'primereact/api';
+// import { PaperClipIcon } from '@heroicons/react/20/solid'
+// import { Container } from "@/components/Container"
 
 import "primereact/resources/themes/tailwind-light/theme.css";
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 
 
-
-
 export default function Data() {
 
 
 // Formatting rendered data
-const { currencyBodyTemplate } = FormattingRenders();
-const {healthInsuranceFormatted} = FormattingRenders();
-const {otherBenefitsFormatted} = FormattingRenders();
-const {paidDaysOffValueFormatted} = FormattingRenders();
-const {compPerPatientFormatted} = FormattingRenders();
-const {compPerHourFormatted} = FormattingRenders();
-const {annualSalaryAndBonusFormatted} = FormattingRenders()
-const {dailyRateAndBonusFormatted} = FormattingRenders()
-const {annualizedDailyRateAndBonusFormatted} = FormattingRenders()
-const {paidDaysOffFormatted} = FormattingRenders();
-const {patientsPerDayFormatted} = FormattingRenders();
-const {patientsPerWeekFormatted} = FormattingRenders();
-const {dailyHoursFormatted} = FormattingRenders();
-const {weeklyHoursFormatted} = FormattingRenders();
-
-
+  const { currencyBodyTemplate } = FormattingRenders();
+// const {healthInsuranceFormatted} = FormattingRenders();
+// const {otherBenefitsFormatted} = FormattingRenders();
+// const {paidDaysOffValueFormatted} = FormattingRenders();
+// const {compPerPatientFormatted} = FormattingRenders();
+// const {compPerHourFormatted} = FormattingRenders();
+// const {annualSalaryAndBonusFormatted} = FormattingRenders()
+// const {dailyRateAndBonusFormatted} = FormattingRenders()
+// const {annualizedDailyRateAndBonusFormatted} = FormattingRenders()
+// const {paidDaysOffFormatted} = FormattingRenders();
+// const {patientsPerDayFormatted} = FormattingRenders();
+// const {patientsPerWeekFormatted} = FormattingRenders();
+// const {dailyHoursFormatted} = FormattingRenders();
+// const {weeklyHoursFormatted} = FormattingRenders();
 
 
 
@@ -77,17 +75,36 @@ const {weeklyHoursFormatted} = FormattingRenders();
     const deleteTemplate = (rowData) => {
       return (
         <>
-          <button
-            onClick={() => deleteJob(rowData.id)}
-            className="inline-block rounded-md bg-red-300 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700"
-          >
-            Delete
-          </button>
+          <div className="text-center">
+            <button
+              onClick={() => deleteJob(rowData.id)}
+              className="inline-block rounded-md bg-red-400 mx-1 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700"
+            >
+              Delete
+            </button>
+          </div>
+        </>
+      );
+    };
+////////add salary button//////
+    const addSalaryTemplate = (rowData) => {
+      return (
+        <>
+        <div className="text-center">
+          <a
+              href="/jobform"
+              className="inline-block rounded-md bg-cyan-500 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Add New Salary
+          </a>
+        </div>
         </>
       );
     };
 
-    //delete button function ---> still needs to be updated to MySQL
+
+
+//////delete button function ---> still needs to be updated to MySQL
     function deleteJob(jobId){
       const apiDeleteUrl = `http://localhost:8080/api/v1/jobs/deletesinglejob/1`;
       fetch(apiDeleteUrl,{
@@ -111,14 +128,8 @@ const {weeklyHoursFormatted} = FormattingRenders();
       console.log(`${jobId}`);
       // window.location.reload();
     };
-    
 
-
-
-
-
-
-///////////// Row Expansion//////////////////
+///////////// Row Expansion///////////////
     const [expandedRows, setExpandedRows] = useState(null);
 
     /// allows row expansion
@@ -134,117 +145,53 @@ const {weeklyHoursFormatted} = FormattingRenders();
     const onRowCollapse = (event) => {
     };
 
-    /////Template for row expansion
-    const rowExpansionTemplate = (rowData) => {
-      return (
-        <div>
-          <div className="px-5 sm:px-0 ">
-            {rowData.dailyRateAndBonus!=null && (<h3 className=" font-semibold leading-7 text-gray-900 pl-20">Contractor (1099)</h3>)}
-            {rowData.annualSalaryAndBonus!=null && (<h3 className=" font-semibold leading-7 text-gray-900 pl-20">Employed (W-2)</h3>)}
-          </div>
-          <div className="mt-6 pl-20">
-            <dl className="grid grid-cols-1 sm:grid-cols-4">
-              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-                <dt className="text-sm font-medium leading-6 text-gray-900">
-                  {rowData.dailyRateAndBonus!=null && (<p>Daily Pay with Bonus</p>)}
-                  {rowData.annualSalaryAndBonus!=null && (<p>Annual Pay with Bonus</p>)}
-                </dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                  {rowData.dailyRateAndBonus!=null && (<p>{dailyRateAndBonusFormatted(rowData)}</p>)}
-                  {rowData.annualSalaryAndBonus!=null && (<p>{annualSalaryAndBonusFormatted(rowData)}</p>)}
-                </dd>
-              </div>
-              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-                <dt className="text-sm font-medium leading-6 text-gray-900">Employer Annual Health Ins</dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{healthInsuranceFormatted(rowData)}</dd>
-              </div>
-              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-                <dt className="text-sm font-medium leading-6 text-gray-900">Employer Annual Other Benefits</dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{otherBenefitsFormatted(rowData)}</dd>
-              </div>
-              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-                <dt className="text-sm font-medium leading-6 text-gray-900">Paid Days Off</dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{paidDaysOffFormatted(rowData)}</dd>
-              </div>
-              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-                <dt className="text-sm font-medium leading-6 text-gray-900">
-                  {rowData.dailyHours!=null && (<p>Hours/Day</p>)}
-                  {rowData.weeklyHours!=null && (<p>Hours/Week</p>)}
-                </dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                  {rowData.dailyHours!=null && (<p>{dailyHoursFormatted(rowData)}</p>)}
-                  {rowData.weeklyHours!=null && (<p>{weeklyHoursFormatted(rowData)}</p>)}
-                </dd>
-              </div>
-              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-                <dt className="text-sm font-medium leading-6 text-gray-900">
-                  {rowData.patientsPerDay!=null && (<p>Patients/Day</p>)}
-                  {rowData.patientsPerWeek!=null && (<p>Patients/Week</p>)}
-                </dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                  {rowData.patientsPerDay!=null && (<p>{patientsPerDayFormatted(rowData)}</p>)}
-                  {rowData.patientsPerWeek!=null && (<p>{patientsPerWeekFormatted(rowData)}</p>)}
-                </dd>
-              </div>
-              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-                <dt className="text-sm font-medium leading-6 text-gray-900">Total Comp/Patient</dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{compPerPatientFormatted(rowData)}</dd>
-              </div>
-              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
-                <dt className="text-sm font-medium leading-6 text-gray-900">Total Comp/Hour</dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{compPerHourFormatted(rowData)}</dd>
-              </div>
-              <div className="border-t border-gray-100 px-4 py-6 sm:col-span-4 sm:px-0">
-                <dt className="text-sm font-medium leading-6 text-gray-900">Comments</dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                  {rowData.comments}
-                </dd>
-              </div>
-            </dl>
-          </div>
-        </div>
-      );
-    };
-
-
-
-
-///// Actual interface
+//////////// Actual interface //////////////
     return (
 
       <>
         <Header/>
           <div className="px-4 sm:px-10 lg:px-10 xl:px-20 py-5">
-            <div className="sm:flex sm:items-center">
-              <div className="sm:flex-auto">
-                <h1 className="text-base font-semibold leading-6 text-gray-900">Your Salary Compensation History:</h1>
-                {/* <p className="mt-2 text-sm text-gray-700">
-                  Explore below:
-                </p> */}
+            <div className="sm:flex sm:items-left flex-col">
+              <div className="sm:flex-auto text-left">
+                <h1 className="text-base font-semibold leading-6 text-gray-900">Your Account:</h1>
               </div>
-              <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+              <div className="mt-4 sm:ml-0 sm:mt-0 sm:flex-none">
                 <a
                   href='/deleteaccount'
-                  className="inline-block rounded-md bg-red-400 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700"
+                  className="mt-2 inline-block rounded-md bg-red-400 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700"
                 >
                   Delete Account
                 </a>
                 <a
                   href='/odformupdate'
-                  className="inline-block rounded-md bg-cyan-500 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="mt-2 inline-block rounded-md bg-cyan-500 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Update Account
                 </a>
                 <a
+                  href="/data"
+                  className="mt-2 inline-block rounded-md bg-cyan-500 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Logout
+                </a>
+                {/* <a
+                    href="/jobform"
+                    className="mt-2 float-right inline-block rounded-md bg-cyan-500 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    Add New Salary
+                </a> */}
+              </div>
+              {/* <div className="mt-2 ml-auto">
+                <a
                   href="/jobform"
-                  className="inline-block rounded-md bg-cyan-500 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className=" rounded-md bg-cyan-500 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Add New Salary
                 </a>
-              </div>
+              </div> */}
             </div>
 
-            <div className="mt-10 flow-root">
+            <div className="mt-8 flow-root">
               <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                   <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
@@ -265,6 +212,8 @@ const {weeklyHoursFormatted} = FormattingRenders();
                       //PAGINATER
                       paginator
                       rows={10}
+                      paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+                      currentPageReportTemplate="{first}  to  {last}  of  {totalRecords}" 
                       // paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
 
 
@@ -297,7 +246,7 @@ const {weeklyHoursFormatted} = FormattingRenders();
                         <Column  
                                 field="year" 
                                 header="Year" 
-                                sortable style={{ width: '5%' }}
+                                sortable style={{ width: '2%' }}
                                 ></Column>
 
                         <Column 
@@ -326,7 +275,7 @@ const {weeklyHoursFormatted} = FormattingRenders();
                                 showFilterMenu={false}
                                 filter
                                 filterField="setting" 
-                                style={{ width: '15%' }}
+                                style={{ width: '10%' }}
                                 ></Column>    
 
                         <Column 
@@ -334,12 +283,13 @@ const {weeklyHoursFormatted} = FormattingRenders();
                                 header="Annualized Total Comp" 
                                 body={currencyBodyTemplate}
                                 sortable 
-                                style={{ width: '15%' }}
+                                style={{ width: '10%' }}
                                 ></Column>
 
                         <Column 
+                                header={addSalaryTemplate} 
                                 body={deleteTemplate}
-                                style={{ width: '10%' }}
+                                style={{ width: '13%' }}
                                 ></Column>  
                     </DataTable>
 

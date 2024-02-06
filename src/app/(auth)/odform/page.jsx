@@ -45,6 +45,13 @@ export default function ODForm() {
       formattedValue = value;
     }
 
+    // if(name === 'initialDebt'||name === 'yearGraduated') {
+    //   if (value === ""){
+    //     value=0;
+    //   }
+    // }
+
+
     //format data to display
     setFormData({ 
       ...formData, 
@@ -54,7 +61,7 @@ export default function ODForm() {
     //unformat data to send to backend
     setFormDataSend({ 
       ...formDataSend, 
-      [name]: name === 'initialDebt' ? removeNonNumericCharacters(value) : value
+      [name]: name === 'initialDebt' ? removeNonNumericCharacters(value): value,
     });
   }
 
@@ -127,7 +134,7 @@ export default function ODForm() {
                   id="initialDebt"
                   name="initialDebt"
                   type="text"
-                  placeholder='Please answer in USD'
+                  placeholder='USD'
                   value={formData.initialDebt}
                   onChange={onInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"

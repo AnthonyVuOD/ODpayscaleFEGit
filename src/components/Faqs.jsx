@@ -5,7 +5,7 @@ const faqs = [
     {
       question: 'Is my information secure?',
       answer:
-        'The only information available to other optometrists is your anonymous salary data that you provide. This data will not be associated with your identity as I will not even have any information directly relating to your indentify. Keeping your identity anonymous is a top priority of mine and I will not ask for any identifiying information.',
+        'The only information available to others is your anonymous salary data that you provide. This data will not be associated with your identity as I will not even have any information directly relating to your indentity. Keeping your identity anonymous is a top priority of mine and I will not ask for any identifiying information.',
     },
     // {
     //   question: 'Why are you doing this?',
@@ -22,7 +22,7 @@ const faqs = [
     {
       question: 'Why should I use this platform?',
       answer:
-        "I believe this is the most efficient way to share job salaries anonymously and to have access to accurate data. Not only will you be able to share important details of your compensation package, but I will provide other standardized metrics that give context and will make it easier to compare with other compensation packages."
+        "I believe this is the most efficient way to share job salaries anonymously and to have access to accurate data. Not only will you be able to share details of your compensation package, but I will provide other standardized metrics that give context and will make it easier to compare with other compensation packages."
     },
     // {
     //   question: 'Where is Pocket based?',

@@ -1,13 +1,15 @@
 'use client'
 import { Container } from '@/components/Container'
-import {UserCircleIcon, PhotoIcon } from '@heroicons/react/20/solid'
 import { useState } from 'react';
-import { Switch } from '@headlessui/react';
-import { RadioButton } from 'primereact/radiobutton';
 import { formatNumbersOnly } from '@/components/FormattingNumbersOnly';
 import { formatNumbersOnlyNoDecimals } from '@/components/FormattingNumbersOnlyNoDecimals';
 import { formatCurrency } from '@/components/FormattingCurrency';
 import { removeNonNumericCharacters } from '@/components/RemoveNonNumericaCharacters';
+
+// import { Switch } from '@headlessui/react';
+// import { RadioButton } from 'primereact/radiobutton';
+// import {UserCircleIcon, PhotoIcon } from '@heroicons/react/20/solid'
+
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -382,7 +384,7 @@ export default function JobForm (){
                                                 <option>Private Practice</option>
                                                 <option>Retail/ Commercial</option>
                                                 <option>MD/OD</option>
-                                                <option>Veteran Affairs</option>
+                                                <option>Veterans Affairs</option>
                                                 <option>Hospital Based</option>
                                                 <option>Remote</option>
                                                 <option>Other</option>
@@ -698,7 +700,7 @@ export default function JobForm (){
                                                 <option>Private Practice</option>
                                                 <option>Retail/ Commercial</option>
                                                 <option>MD/OD</option>
-                                                <option>Veteran Affairs</option>
+                                                <option>Veterans Affairs</option>
                                                 <option>Hospital Based</option>
                                                 <option>Remote</option>
                                                 <option>Other</option>

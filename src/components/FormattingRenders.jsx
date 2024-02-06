@@ -1,8 +1,7 @@
-import react from "@heroicons/react";
-
-
+// import react from "@heroicons/react";
 
 export function FormattingRenders(){
+
     ////formatting normalizedAnnualComp rounded to nearest dollar//////
     const currencyBodyTemplate = (rowData) => {
         const formattedCurrencyNormalizedAnnualComp = new Intl.NumberFormat('en-US', {
@@ -12,7 +11,6 @@ export function FormattingRenders(){
       }).format(rowData.normalizedAnnualComp);  
   
     return <span>{formattedCurrencyNormalizedAnnualComp}</span>; 
-
     };
 
     /// formatting Health Insurance Value rounded to nearest dollar
@@ -24,8 +22,7 @@ export function FormattingRenders(){
           }).format(rowData.healthInsuranceValue);  
       
         return <span>{formattedCurrencyHealthInsuranceValue}</span>; 
-    
-        };
+    };
     
     /// formatting Other benefits Value rounded to nearest dollar
     const otherBenefitsFormatted = (rowData) => {
@@ -36,8 +33,7 @@ export function FormattingRenders(){
             }).format(rowData.otherBenefitsValue);  
         
         return <span>{formattedOtherBenefitsValue}</span>; 
-    
-        };
+    };
 
     /// formatting PTO Value rounded to nearest dollar
     const paidDaysOffValueFormatted = (rowData) => {
@@ -48,8 +44,7 @@ export function FormattingRenders(){
             }).format(rowData.paidDaysOffValue);  
         
         return <span>{formattedPaidDaysOffValue}</span>; 
-    
-        };
+    };
 
     /// formatting comp/hour rounded to nearest cent
     const compPerHourFormatted = (rowData) => {
@@ -60,8 +55,7 @@ export function FormattingRenders(){
             }).format(rowData.compPerHour);  
         
         return <span>{compPerHour}</span>; 
-    
-        };
+    };
 
     /// formatting comp/patient rounded to nearest cent
     const compPerPatientFormatted = (rowData) => {
@@ -72,8 +66,7 @@ export function FormattingRenders(){
             }).format(rowData.compPerPatient);  
         
         return <span>{compPerPatient}</span>; 
-    
-        };
+    };
     
     /// formatting annual Salary and bonus rounded to nearest dollar
     const annualSalaryAndBonusFormatted = (rowData) => {
@@ -84,8 +77,7 @@ export function FormattingRenders(){
             }).format(rowData.annualSalaryAndBonus);  
         
         return <span>{annualSalaryAndBonus}</span>; 
-    
-        };
+    };
 
     /// formatting daily rate and bonus rounded to nearest dollar
     const dailyRateAndBonusFormatted = (rowData) => {
@@ -96,8 +88,7 @@ export function FormattingRenders(){
             }).format(rowData.dailyRateAndBonus);  
         
         return <span>{dailyRateAndBonus}</span>; 
-    
-        };
+    };
     
     /// formatting annualized salary/rate and bonus rounded to nearest dollar
     const annualizedDailyRateAndBonusFormatted = (rowData) => {
@@ -108,8 +99,7 @@ export function FormattingRenders(){
             }).format(rowData.annualizedDailyRateAndBonus);  
         
         return <span>{annualizedDailyRateAndBonus}</span>; 
-    
-        };
+    };
     
     const paidDaysOffFormatted = (rowData) => {
         const paidDaysOff = new Intl.NumberFormat('en-US', {
@@ -117,7 +107,7 @@ export function FormattingRenders(){
             }).format(rowData.paidDaysOff);
         
         return <span>{paidDaysOff}</span>;
-        };
+    };
 
     const patientsPerDayFormatted = (rowData) => {
         const patientsPerDay = new Intl.NumberFormat('en-US', {
@@ -125,7 +115,7 @@ export function FormattingRenders(){
             }).format(rowData.patientsPerDay);
         
         return <span>{patientsPerDay}</span>;
-        };
+    };
 
     const patientsPerWeekFormatted = (rowData) => {
         const patientsPerWeek = new Intl.NumberFormat('en-US', {
@@ -133,7 +123,7 @@ export function FormattingRenders(){
             }).format(rowData.patientsPerWeek);
         
         return <span>{patientsPerWeek}</span>;
-        };
+    };
 
     const dailyHoursFormatted = (rowData) => {
         const dailyHours = new Intl.NumberFormat('en-US', {
@@ -141,29 +131,29 @@ export function FormattingRenders(){
             }).format(rowData.dailyHours);
         
         return <span>{dailyHours}</span>;
-        };
+    };
     const weeklyHoursFormatted = (rowData) => {
         const weeklyHours = new Intl.NumberFormat('en-US', {
             maximumFractionDigits: 2,
             }).format(rowData.weeklyHours);
         
         return <span>{weeklyHours}</span>;
-        };
+    };
         
-  return {
-    currencyBodyTemplate,
-    healthInsuranceFormatted,
-    otherBenefitsFormatted,
-    paidDaysOffValueFormatted,
-    compPerPatientFormatted,
-    compPerHourFormatted,
-    annualSalaryAndBonusFormatted ,
-    dailyRateAndBonusFormatted,
-    annualizedDailyRateAndBonusFormatted,
-    paidDaysOffFormatted,
-    patientsPerDayFormatted,
-    patientsPerWeekFormatted,
-    dailyHoursFormatted,
-    weeklyHoursFormatted
-  };
+    return {
+        currencyBodyTemplate,
+        healthInsuranceFormatted,
+        otherBenefitsFormatted,
+        paidDaysOffValueFormatted,
+        compPerPatientFormatted,
+        compPerHourFormatted,
+        annualSalaryAndBonusFormatted ,
+        dailyRateAndBonusFormatted,
+        annualizedDailyRateAndBonusFormatted,
+        paidDaysOffFormatted,
+        patientsPerDayFormatted,
+        patientsPerWeekFormatted,
+        dailyHoursFormatted,
+        weeklyHoursFormatted
+    };
 }

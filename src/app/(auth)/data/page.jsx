@@ -1,17 +1,22 @@
 'use client'
 
-import { Container } from "@/components/Container"
 import { Header } from "@/components/Header"
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { DataTableFilterMeta, header, representativeBodyTemplate, representativeRowFilterTemplate, loading, filters, body, filterElement, expandedRows, onRowExpand, onRowCollapse, rowExpansionTemplate, allowExpansion } from "primereact/datatable";
 import { Footer } from "@/components/Footer";
 import { useState, useEffect } from "react";
-import { Formatting, FormattingRenders } from "@/components/FormattingRenders";
-import { Button } from 'primereact/button';
+import { FormattingRenders } from "@/components/FormattingRenders";
+import { rowExpansionTemplate } from "@/components/DataExpansionTemplate";
+
+// import { Button } from 'primereact/button';
+// import { DataTableFilterMeta, header, representativeBodyTemplate, representativeRowFilterTemplate, loading, filters, body, filterElement, expandedRows, onRowExpand, onRowCollapse, rowExpansionTemplate, allowExpansion } from "primereact/datatable";
+// import { Container } from "@/components/Container"
+
+// import 'primereact/resources/themes/saga-blue/theme.css'; // Choose your theme
+
 import "primereact/resources/themes/tailwind-light/theme.css";
-import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
+// import 'primereact/resources/primereact.min.css';
+// import 'primeicons/primeicons.css';
 
 
 
@@ -21,7 +26,7 @@ import 'primeicons/primeicons.css';
 
 export default function Data() {
 
-///////Declare JobCollection and API tp populate JobCollection///////
+///////Declare JobCollection and API to populate JobCollection///////
     const [jobCollection, setJobCollection] = useState([]);
 
     async function fetchData(){
@@ -30,8 +35,10 @@ export default function Data() {
 
         if(response.ok){
           const data = await response.json();
+          const reversedData = data.slice().reverse();
 
-          setJobCollection(data);
+
+          setJobCollection(reversedData);
           console.log(jobCollection);
 
         } else {
@@ -41,31 +48,29 @@ export default function Data() {
         console.log("Error fetching data: ", error.message);
       }
     };
+
     // useEffect to automatically call API jobCollection
     useEffect(()=>{
       fetchData();
     }, []);
 
 // ////formatting of rendered data //////
-const { currencyBodyTemplate } = FormattingRenders();
-const {healthInsuranceFormatted} = FormattingRenders();
-const {otherBenefitsFormatted} = FormattingRenders();
-const {paidDaysOffValueFormatted} = FormattingRenders();
-const {compPerPatientFormatted} = FormattingRenders();
-const {compPerHourFormatted} = FormattingRenders();
-const {annualSalaryAndBonusFormatted} = FormattingRenders()
-const {dailyRateAndBonusFormatted} = FormattingRenders()
-const {annualizedDailyRateAndBonusFormatted} = FormattingRenders()
-const {paidDaysOffFormatted} = FormattingRenders();
-const {patientsPerDayFormatted} = FormattingRenders();
-const {patientsPerWeekFormatted} = FormattingRenders();
-const {dailyHoursFormatted} = FormattingRenders();
-const {weeklyHoursFormatted} = FormattingRenders();
+  const { currencyBodyTemplate } = FormattingRenders();
 
-
-
-
-
+//imported from DataExpansionTemplate
+// const {healthInsuranceFormatted} = FormattingRenders();
+// const {otherBenefitsFormatted} = FormattingRenders();
+// const {paidDaysOffValueFormatted} = FormattingRenders();
+// const {compPerPatientFormatted} = FormattingRenders();
+// const {compPerHourFormatted} = FormattingRenders();
+// const {annualSalaryAndBonusFormatted} = FormattingRenders()
+// const {dailyRateAndBonusFormatted} = FormattingRenders()
+// const {annualizedDailyRateAndBonusFormatted} = FormattingRenders()
+// const {paidDaysOffFormatted} = FormattingRenders();
+// const {patientsPerDayFormatted} = FormattingRenders();
+// const {patientsPerWeekFormatted} = FormattingRenders();
+// const {dailyHoursFormatted} = FormattingRenders();
+// const {weeklyHoursFormatted} = FormattingRenders();
 
 
 ///////////// Row Expansion//////////////////
@@ -86,107 +91,6 @@ const {weeklyHoursFormatted} = FormattingRenders();
 
 
 
-  /////Template for row expansion
-  const rowExpansionTemplate = (rowData) => {
-    return (
-      <div>
-        <div className="px-5 sm:px-0 ml-14">
-          <dl className="grid grid-cols-2 sm:grid-cols-10">
-            <div className="border-t border-gray-100 px-2 py-4 sm:col-span-2 sm:px-0 bg-slate-100 rounded-l-md">
-               <dd className="mt-1 text-sm leading-6 pl-9 sm:pl-7 pb-2 text-gray-700 sm:mt-2">
-                {rowData.dailyRateAndBonus!=null && (<h3 className=" font-semibold leading-1 text-gray-900 inline-block">Contractor (1099)</h3>)}
-                {rowData.annualSalaryAndBonus!=null && (<h3 className=" font-semibold leading-1 text-gray-900 inline-block">Employed (W-2)</h3>)}
-               </dd>
-            </div>
-            <div className="border-t border-gray-100 px-2 py-4 sm:col-span-3 sm:px-0 bg-slate-100 rounded-r-md mr-1">
-               <dd className="mt-1 text-sm leading-6 text-right text-gray-700 sm:mt-2">
-               {rowData.city !== "" ? (
-                  <h3 className="font-medium leading-1 text-gray-900 pr-9 sm:pr-7 inline-block">
-                    {rowData.city}, {rowData.state}
-                  </h3>
-                ) : (
-                  <h3 className="font-medium leading-1 text-gray-900 pr-9 sm:pr-7 inline-block">
-                    No city specified, {rowData.state}
-                  </h3>
-                )}
-               </dd>
-            </div>
-          </dl>
-        </div>
-
-        <div className="px-5 sm:px-0 mt-2 ml-14">
-          <dl className="grid grid-cols-2 sm:grid-cols-12 ">
-            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-4 sm:px-0 bg-slate-100 rounded-l-md">
-              <dt className="text-sm  leading-relaxed pl-7 text-gray-900">
-                {rowData.dailyRateAndBonus!=null && (<p>Annualized Daily Pay ({dailyRateAndBonusFormatted(rowData)})</p>)}
-                {rowData.annualSalaryAndBonus!=null && (<p>Annual Salary and Bonus</p>)}
-                <p>Health Insurance Value</p>
-                <p>Other Benefits Value</p>
-                <p>{paidDaysOffFormatted(rowData)} Days PTO Estimated Value</p>
-                <hr style={{ borderTop: '1px solid gray', margin: '2px 0'  }}/>
-                <p>Annualized Total Compensation</p>
-              </dt>
-            </div>
-
-            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-2 sm:px-0 bg-slate-100 rounded-r-md mr-1">
-              <dd className="text-sm leading-relaxed font-medium text-right pr-7 text-gray-900">
-                {rowData.dailyRateAndBonus!=null && (<p>{annualizedDailyRateAndBonusFormatted(rowData)}</p>)}
-                {rowData.annualSalaryAndBonus!=null && (<p>{annualSalaryAndBonusFormatted(rowData)}</p>)}
-                <p>{healthInsuranceFormatted(rowData)}</p>
-                <p>{otherBenefitsFormatted(rowData)}</p>
-                <p>{paidDaysOffValueFormatted(rowData)}</p>
-                <hr style={{ borderTop: '1px solid gray', margin: '2px 0'  }}/>
-                <p>{currencyBodyTemplate(rowData)}</p>
-              </dd>
-            </div>
-
-            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-3 mt-2 sm:mt-0 sm:px-0 bg-slate-100 sm:ml-1 rounded-l-md">
-              <dt className="text-sm pl-7 leading-relaxed text-gray-900">
-                {rowData.patientsPerDay!=null && (<p>Patients/Day</p>)}
-                {rowData.patientsPerWeek!=null && (<p>Patients/Week</p>)}
-                {rowData.dailyHours!=null && (<p>Hours/Day</p>)}
-                {rowData.weeklyHours!=null && (<p>Hours/Week</p>)}
-                <p>Total Comp/Patient</p>
-                <p>Total Comp/Hour</p>
-              </dt>
-            </div>
-
-            <div className="border-t border-gray-100 px-4 py-6 sm:col-span-2 mt-2 sm:mt-0 sm:px-0 mr-1 bg-slate-100 rounded-r-md">
-              <dd className="text-sm font-medium pr-7 text-right leading-relaxed text-gray-900">
-                {rowData.patientsPerDay!=null && (<p>{patientsPerDayFormatted(rowData)}</p>)}
-                {rowData.patientsPerWeek!=null && (<p>{patientsPerWeekFormatted(rowData)}</p>)}
-                {rowData.dailyHours!=null && (<p>{dailyHoursFormatted(rowData)}</p>)}
-                {rowData.weeklyHours!=null && (<p>{weeklyHoursFormatted(rowData)}</p>)}
-                <p>{compPerPatientFormatted(rowData)}</p>
-                <p>{compPerHourFormatted(rowData)}</p>
-              </dd>
-            </div>
-          </dl>
-        </div>
-
-        <div className="px-5 sm:px-0 ml-14">
-          <dl className="grid grid-cols-1 sm:grid-cols-12">
-            <div className="border-t border-gray-100 px-2 py-4 sm:col-span-11 sm:px-0 mr-1 bg-slate-100 rounded-md mt-2">
-               <dd className="mt-1 text-sm leading-6 sm:pl-7 pr-7 pb-3 pl-9 text-gray-700 sm:mt-2">
-                <h3 className=" font-semibold leading-6 text-gray-900 inline-block">Comments:</h3>
-                {rowData.comments !== "" ? (
-                  <h3 className=" leading-6 text-gray-900 pr-1 ">
-                    {rowData.comments}
-                  </h3>
-                ) : (
-                  <h3 className=" leading-6 text-gray-900 pr-1 ">
-                    No comment given.
-                  </h3>
-                )}
-               </dd>
-            </div>
-          </dl>
-        </div>
-      </div>
-    );
-  };
-
-
 //////////Actual interface
     return (
       <>
@@ -194,10 +98,7 @@ const {weeklyHoursFormatted} = FormattingRenders();
           <div className="px-4 sm:px-10 lg:px-10 xl:px-20 py-5">
             <div className="sm:flex sm:items-center">
               <div className="sm:flex-auto">
-                <h1 className="text-base font-semibold leading-6 text-gray-900">Explore Optometry Compensation Packages:</h1>
-                {/* <p className="mt-2 text-sm text-gray-700">
-                  Explore below:
-                </p> */}
+                <h1 className="text-base font-semibold leading-6 text-gray-900">Explore Optometry Compensation Data:</h1>
               </div>
               <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                 <a
@@ -217,11 +118,11 @@ const {weeklyHoursFormatted} = FormattingRenders();
 
                     <DataTable 
                       //what data set is being mapped
-                      // value={jobs}
                       value={jobCollection}
 
                       //styling
-                      tableStyle={{ minWidth: '30rem' }}
+                      tableStyle
+                      // ={{ minWidth: '30rem' }}
                       className="px-3 py-3.5 text-left text-sm text-gray-900 min-w-full divide-y divide-gray-300"
                       showGridlines
                       stripedRows
@@ -230,8 +131,14 @@ const {weeklyHoursFormatted} = FormattingRenders();
                       removableSort
 
                       //PAGINATER
-                      paginator
+                      paginator={true}
                       rows={10}
+                      paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+                      currentPageReportTemplate="{first} to {last} of {totalRecords}" 
+
+                      // paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}
+                      // first={first} rows={rows} totalRecords={120} rowsPerPageOptions={[10, 20, 30]} onPageChange={onPageChange}
+                      // rowsPerPageOptions={[ 10, 15, 20]}
                       // paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
 
 
@@ -243,7 +150,7 @@ const {weeklyHoursFormatted} = FormattingRenders();
                       // globalFilterFields={[]}
                       // dataKey="id"
                       // header={header} 
-                      // loading={loading}
+                      // loading="loading"
                       
 
                       //EXPANSION
@@ -253,8 +160,7 @@ const {weeklyHoursFormatted} = FormattingRenders();
                       onRowCollapse={onRowCollapse} 
                       rowExpansionTemplate={rowExpansionTemplate}
                       >
-                        
-
+                      
                         <Column 
                                 expander={allowExpansion}
                                 style={{ width: '2%' }}
