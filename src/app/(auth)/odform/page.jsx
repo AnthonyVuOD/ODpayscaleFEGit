@@ -1,17 +1,52 @@
 // import {UserCircleIcon, PhotoIcon } from '@heroicons/react/24/solid'
 // import {UserCircleIcon, PhotoIcon } from '@heroicons/react/24/outline'
-'use client'
+'use client' 
 import { Container } from '@/components/Container'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { formatCurrency } from '@/components/FormattingCurrency';
 import { formatNumbersOnlyNoDecimals } from '@/components/FormattingNumbersOnlyNoDecimals';
 import { removeNonNumericCharacters } from '@/components/RemoveNonNumericaCharacters';
 
+import { AuthLayout } from '@/components/AuthLayout'
+import { createClient } from '@supabase/supabase-js'
+import { Auth } from '@supabase/auth-ui-react'
+import { ThemeSupa } from '@supabase/auth-ui-shared'
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import LoginFirst from '../loginfirst/page';
 
-export default function ODForm() {
+const supabase = createClient(
+    'https://tsrrewcbkzocevvrlsih.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcnJld2Nia3pvY2V2dnJsc2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5MDMzNjksImV4cCI6MjAxNzQ3OTM2OX0.H3QUkTtGrRxO1OvDE9kU49sILeYydS1zGdZnXZ-P29o'
+)
 
-///this data will be displayed to user formatted
+
+export default function ODForm(){
+  
+  const [loading, setLoading] = useState(true);
+
+  const router = useRouter();
+
+////////initialize userId///////
+  const [userId, setUserId] = useState(null);
+
+//////Find and set userId if user is authorized//////
+  useEffect(()=>{
+    async function getUserData(){
+      await supabase.auth.getUser().then((value)=>{
+        if(value.data?.user){
+          setUserId(value.data.user.id);
+          console.log(userId); 
+        }
+        setLoading(false);
+      })
+    }
+    getUserData(); 
+  },[])
+
+///initialize Data, this data will be displayed to user formatted
   const [formData, setFormData] = useState({
+    "id": userId,
     "yearGraduated": '',
     "initialDebt": '',
     "residency": 'No',
@@ -19,14 +54,23 @@ export default function ODForm() {
     "race": 'Caucasian',
   });
 
-///this data will be sent to backend unformatted (data with "$" and "," will not be accepted by backend)
+///initialize Data, this data will be sent to backend unformatted (data with "$" and "," will not be accepted by backend)
   const [formDataSend, setFormDataSend] = useState({
+    "id": userId,
     "yearGraduated": '',
     "initialDebt": '',
     "residency": 'No',
     "gender": 'Female',
     "race": 'Caucasian',
   });
+
+///this assigns "UserId" to "id" whenever "userId"  changes////
+  useEffect(() => {
+    setFormDataSend(prevFormDataSend => ({
+      ...prevFormDataSend,
+      id: userId 
+    }));
+  }, [userId]);
 
 
   function onInputChange(e){
@@ -39,12 +83,13 @@ export default function ODForm() {
     }
     else if (name === 'yearGraduated') {
       formattedValue = formatNumbersOnlyNoDecimals(value);
-    }
+    } 
     else {
       // No formatting for other fields
       formattedValue = value;
     }
-
+  
+  ////NEED TO FIND A WAY TO DEFAULT TO 0/////
     // if(name === 'initialDebt'||name === 'yearGraduated') {
     //   if (value === ""){
     //     value=0;
@@ -63,6 +108,9 @@ export default function ODForm() {
       ...formDataSend, 
       [name]: name === 'initialDebt' ? removeNonNumericCharacters(value): value,
     });
+
+    console.log(userId);
+    console.log(formDataSend)
   }
 
   function createOptometristAccount(e){
@@ -79,17 +127,30 @@ export default function ODForm() {
     .then((response)=>response.text())
     .then((responseText)=>{
       console.log(responseText);
+      // router.push("/account");
     })
     .catch((error)=>{
       console.log(error)
     })
-
+    router.push("/account");
     console.log("Hello smello");
   };
 
+
+  if(loading){
+    return(
+      <></>
+    )
+  } else if(userId===null){
+    return (
+      <LoginFirst/>
+    )
+  }
   return (
     <Container>
-    <form onSubmit={createOptometristAccount}>
+    <form 
+      onSubmit={createOptometristAccount}
+      >
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
           {/* <h2 className="text-base font-semibold leading-7 text-gray-900">Account</h2>
@@ -206,12 +267,12 @@ export default function ODForm() {
       </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6 pb-10">
-        <a
+        <Link
           href="/data"
           className="text-sm font-semibold leading-6 text-gray-900"
         >
           Cancel
-        </a>
+        </Link>
         <button
           // href="/account"
           type='submit'

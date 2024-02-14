@@ -7,10 +7,33 @@ import { useState } from 'react'
 import { formatCurrency } from '@/components/FormattingCurrency';
 import { formatNumbersOnlyNoDecimals } from '@/components/FormattingNumbersOnlyNoDecimals';
 import { removeNonNumericCharacters } from '@/components/RemoveNonNumericaCharacters';
+import LoginFirst from '../loginfirst/page';
+
+import { AuthLayout } from '@/components/AuthLayout'
+import { createClient } from '@supabase/supabase-js'
+import { Auth } from '@supabase/auth-ui-react'
+import { ThemeSupa } from '@supabase/auth-ui-shared'
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+const supabase = createClient(
+    'https://tsrrewcbkzocevvrlsih.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcnJld2Nia3pvY2V2dnJsc2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5MDMzNjksImV4cCI6MjAxNzQ3OTM2OX0.H3QUkTtGrRxO1OvDE9kU49sILeYydS1zGdZnXZ-P29o'
+)
+
+
 
 export default function ODFormUpdate() {
 
-  //initialize formData variables
+///variable while authorizing user  
+  const [loading, setLoading] = useState(true);
+
+  const router = useRouter();
+
+////////initialize userId///////
+  const [userId, setUserId] = useState(null);
+
+//////initialize formData Display variables
   const [formDataUpdate, setFormDataUpdate] = useState({
       "yearGraduated": '',
       "initialDebt": '',
@@ -19,6 +42,7 @@ export default function ODFormUpdate() {
       "race": '',
   });
 
+//////initialize formData backend variables
   const [formDataUpdateSend, setFormDataUpdateSend] = useState({
     "yearGraduated": '',
     "initialDebt": '',
@@ -27,24 +51,43 @@ export default function ODFormUpdate() {
     "race": '',
 });
 
+//////set userId//////
+  useEffect(()=>{
+    async function getUserData(){
+      await supabase.auth.getUser().then((value)=>{
+        if(value.data?.user){
+          setUserId(value.data.user.id);
+          console.log(userId);  
+        } 
+        setLoading(false);
+      })
+    }
+    getUserData(); 
+  },[])
 
-  // used to get user data from spring
+///// get user data from backend using userId
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await fetch("http://localhost:8080/api/v1/optometrists/getsingleoptometrist/4");
-        const formDataUpdate = await response.json();
-        // Update state with user data
-        setFormDataUpdate(formDataUpdate);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-  
-    fetchUserData();
-  }, []);
 
-  //on any change, set values
+    if(userId){
+      console.log(userId);
+      const fetchUserData = async () => {
+        try {
+          // const response = await fetch("http://localhost:8080/api/v1/optometrists/getsingleoptometrist/"+"f12bf434-f279-4086-a550-aadb0c0cc467");
+          const response = await fetch("http://localhost:8080/api/v1/optometrists/getsingleoptometrist/"+userId);
+
+          const formDataUpdate = await response.json();
+          // Update state with user data
+          setFormDataUpdate(formDataUpdate);
+          setFormDataUpdateSend(formDataUpdate);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      };
+      fetchUserData();
+    }
+  }, [userId]);
+
+///////on any input change, formData gets changed
   function onInputChange(e){
     const { name, value } = e.target;
 
@@ -76,8 +119,11 @@ export default function ODFormUpdate() {
 ///update data to back-end
   function updateOptometristAccount(e){
     e.preventDefault();
+    // const router = useRouter();
 
-    fetch("http://localhost:8080/api/v1/optometrists/updateoptometrist/4",{
+    // fetch("http://localhost:8080/api/v1/optometrists/updateoptometrist/"+"f12bf434-f279-4086-a550-aadb0c0cc467",{
+    fetch("http://localhost:8080/api/v1/optometrists/updateoptometrist/"+userId,{
+
       method:"PUT",
       headers: {
         'Content-Type': 'application/json',
@@ -88,6 +134,8 @@ export default function ODFormUpdate() {
     .then((response)=>response.text())
     .then((responseText)=>{
       console.log(responseText);
+      router.push("/account");
+
     })
     .catch((error)=>{
       console.log('Error updating user data:', error);
@@ -96,6 +144,17 @@ export default function ODFormUpdate() {
     console.log("Hello smello");
   };
 
+  //// if user is still being authorized///
+  if(loading){
+    return(
+      <></>
+    )
+  //// if user is is not authorized///
+  } else if(userId===null){
+    return (
+      <LoginFirst/>
+    )
+  }
   return (
     <Container>
     <form onSubmit={updateOptometristAccount}>

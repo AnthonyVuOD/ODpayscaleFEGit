@@ -7,7 +7,7 @@ const links = [
   const stats = [
     { name: 'Active US ODs', value: '40,000+' },
     { name: 'Annual graduating ODs', value: '1,700+' },
-    { name: 'Average 2022 OD graduate debt', value: '$225,000+' },
+    { name: 'Average 2022 graduating OD debt', value: '$225,000+' },
     // { name: '', value: '' },
   ]
   

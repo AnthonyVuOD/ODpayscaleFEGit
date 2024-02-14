@@ -7,6 +7,28 @@ import { Footer } from "@/components/Footer";
 import { useState, useEffect, useRef } from "react";
 import { FormattingRenders } from '@/components/FormattingRenders';
 import { rowExpansionTemplate } from '@/components/DataExpansionTemplate';
+import { useRouter } from "next/navigation";
+import AccountSkeleton from "@/components/AccountSkeleton";
+import LoginFirst from "../loginfirst/page";
+
+import { Auth } from '@supabase/auth-ui-react'
+import { ThemeSupa } from '@supabase/auth-ui-shared'
+import { AuthLayout } from '@/components/AuthLayout'
+import { createClient } from '@supabase/supabase-js'
+import Link from 'next/link';
+
+const supabase = createClient(
+    'https://tsrrewcbkzocevvrlsih.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcnJld2Nia3pvY2V2dnJsc2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5MDMzNjksImV4cCI6MjAxNzQ3OTM2OX0.H3QUkTtGrRxO1OvDE9kU49sILeYydS1zGdZnXZ-P29o'
+)
+
+import "primereact/resources/themes/tailwind-light/theme.css";
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+// import { supabase } from "@supabase/auth-ui-shared";
+// import { createClient } from '@supabase/supabase-js'
+// import { Auth } from '@supabase/auth-ui-react'
+// import { ThemeSupa } from '@supabase/auth-ui-shared'
 
 // import { Tag } from "primereact/tag";
 // import { Toast } from "primereact/toast";
@@ -15,12 +37,38 @@ import { rowExpansionTemplate } from '@/components/DataExpansionTemplate';
 // import { PaperClipIcon } from '@heroicons/react/20/solid'
 // import { Container } from "@/components/Container"
 
-import "primereact/resources/themes/tailwind-light/theme.css";
-import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
-
 
 export default function Data() {
+///Loading...///  
+  const [loading, setLoading] = useState(true);
+
+///Router instance
+  const router= useRouter();
+
+////////initialize userId///////
+  const [userId, setUserId] = useState(null);
+
+
+//////set userId//////
+  useEffect(()=>{
+    async function getUserData(){
+      await supabase.auth.getUser().then((value)=>{
+        if(value.data?.user){
+          setUserId(value.data.user.id);
+          console.log(userId); 
+        }
+        setLoading(false)
+      })
+    }
+    getUserData(); 
+  },[])
+
+  ///////////////signout user///////
+  async function signOutUser(){
+    const{error} = await supabase.auth.signOut();
+    ///Need to Navigat to Main Page
+    router.push('/');
+  }
 
 
 // Formatting rendered data
@@ -49,7 +97,8 @@ export default function Data() {
 
     async function fetchData(){
       try {
-        const response = await fetch(`http://localhost:8080/api/v1/jobs/getjobsbyoptometristid/${optometristId}`);
+        // const response = await fetch(`http://localhost:8080/api/v1/jobs/getjobsbyoptometristid/${optometristId}`);
+        const response = await fetch(`http://localhost:8080/api/v1/jobs/getjobsbyoptometristid/`+userId);
 
         if(response.ok){
           const data = await response.json();
@@ -64,14 +113,17 @@ export default function Data() {
         console.log("Error fetching data: ", error.message);
       }
     };
-    // Auto API call on page render
+    // Auto API call to fetch data on page render
     useEffect(()=>{
       fetchData();
-    }, []);
+    }, [userId]);
 
+////Navigate Page/////
+    function navigateToPage(page){
+      router.push(page);
+    }
 
-
- ///////// Delete button template for each row/////////
+///////// Delete button template for each row/////////
     const deleteTemplate = (rowData) => {
       return (
         <>
@@ -91,12 +143,12 @@ export default function Data() {
       return (
         <>
         <div className="text-center">
-          <a
+          <Link
               href="/jobform"
               className="inline-block rounded-md bg-cyan-500 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Add New Salary
-          </a>
+          </Link>
         </div>
         </>
       );
@@ -106,7 +158,7 @@ export default function Data() {
 
 //////delete button function ---> still needs to be updated to MySQL
     function deleteJob(jobId){
-      const apiDeleteUrl = `http://localhost:8080/api/v1/jobs/deletesinglejob/1`;
+      const apiDeleteUrl = `http://localhost:8080/api/v1/jobs/deletesinglejob/`+jobId;
       fetch(apiDeleteUrl,{
         method:'DELETE',
         headers:{
@@ -115,9 +167,12 @@ export default function Data() {
       })
         .then(response =>{
           if (!response.ok){
+            console.log("not successful")
             throw new Error(`HTTP error! Status: ${response.status}`);
+            
           } else {
             console.log(response.text());
+            console.log("success?");
           }
         })
         .catch(error => {
@@ -125,8 +180,8 @@ export default function Data() {
           console.error('Error deleting job:', error.message);
           alert(apiDeleteUrl); 
         });
-      console.log(`${jobId}`);
-      // window.location.reload();
+      // console.log(jobId);
+      
     };
 
 ///////////// Row Expansion///////////////
@@ -146,8 +201,17 @@ export default function Data() {
     };
 
 //////////// Actual interface //////////////
-    return (
+    if(loading){
+      return(
+        <AccountSkeleton/>
+      )
+    } else if(userId===null){
+      return (
+        <LoginFirst/>
+      )
+    }
 
+    return (
       <>
         <Header/>
           <div className="px-4 sm:px-10 lg:px-10 xl:px-20 py-5">
@@ -156,39 +220,28 @@ export default function Data() {
                 <h1 className="text-base font-semibold leading-6 text-gray-900">Your Account:</h1>
               </div>
               <div className="mt-4 sm:ml-0 sm:mt-0 sm:flex-none">
-                <a
-                  href='/deleteaccount'
+                <Link
+                  // onClick={navigateToPage('/deleteaccount')}
+                  href="/deleteaccount"
                   className="mt-2 inline-block rounded-md bg-red-400 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700"
                 >
                   Delete Account
-                </a>
-                <a
-                  href='/odformupdate'
+                </Link>
+                <Link
+                  // onClick={navigateToPage('/odformupdate')}
+                  href="/odformupdate"
                   className="mt-2 inline-block rounded-md bg-cyan-500 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Update Account
-                </a>
-                <a
-                  href="/data"
+                </Link>
+                <button
+                  // href="/data"
+                  onClick={()=>signOutUser()}
                   className="mt-2 inline-block rounded-md bg-cyan-500 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Logout
-                </a>
-                {/* <a
-                    href="/jobform"
-                    className="mt-2 float-right inline-block rounded-md bg-cyan-500 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >
-                    Add New Salary
-                </a> */}
+                </button>
               </div>
-              {/* <div className="mt-2 ml-auto">
-                <a
-                  href="/jobform"
-                  className=" rounded-md bg-cyan-500 mx-1 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Add New Salary
-                </a>
-              </div> */}
             </div>
 
             <div className="mt-8 flow-root">

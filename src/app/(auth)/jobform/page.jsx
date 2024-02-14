@@ -1,46 +1,65 @@
 'use client'
 import { Container } from '@/components/Container'
-import { useState } from 'react';
 import { formatNumbersOnly } from '@/components/FormattingNumbersOnly';
 import { formatNumbersOnlyNoDecimals } from '@/components/FormattingNumbersOnlyNoDecimals';
 import { formatCurrency } from '@/components/FormattingCurrency';
 import { removeNonNumericCharacters } from '@/components/RemoveNonNumericaCharacters';
+import { useEffect, useState } from 'react';
+import LoginFirst from '../loginfirst/page';
 
 // import { Switch } from '@headlessui/react';
 // import { RadioButton } from 'primereact/radiobutton';
 // import {UserCircleIcon, PhotoIcon } from '@heroicons/react/20/solid'
 
+import { createClient } from '@supabase/supabase-js'
+import { Auth } from '@supabase/auth-ui-react'
+import { ThemeSupa } from '@supabase/auth-ui-shared'
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
+const supabase = createClient(
+    'https://tsrrewcbkzocevvrlsih.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcnJld2Nia3pvY2V2dnJsc2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5MDMzNjksImV4cCI6MjAxNzQ3OTM2OX0.H3QUkTtGrRxO1OvDE9kU49sILeYydS1zGdZnXZ-P29o'
+)
+
+
+// function classNames(...classes) {
+//     return classes.filter(Boolean).join(' ')
+// }
 
 export default function JobForm (){
+    /// variable while user is being authorized////
+    const [loading, setLoading] = useState(true);
 
-    // ////Formatting to currency for user inputs
-    // const formatCurrency = (value) => {
-    //     // Remove non-numeric characters
-    //     const numericValue = value.replace(/[^0-9.]/g, '');
-    
-    //     // Use Intl.NumberFormat to format as currency
-    //     const formattedValue = new Intl.NumberFormat('en-US', {
-    //       style: 'currency',
-    //       currency: 'USD', // Change this based on your currency
-    //     //   minimumFractionDigits: 2,
-    //       maximumFractionDigits: 0,
-    //     }).format(numericValue);
-    
-    //     return formattedValue;
-    //   };
+    /// Router
+    const router = useRouter();
+
+    ////////initialize userId///////
+    const [userId, setUserId] = useState(null);
+
+    //////set userId//////
+    useEffect(()=>{
+      async function getUserData(){
+        await supabase.auth.getUser().then((value)=>{
+          if(value.data?.user){
+            setUserId(value.data.user.id);
+            console.log(userId); 
+          }
+          setLoading(false);
+        })
+      }
+      getUserData(); 
+    },[])
 
 
 
 
 
-    
+
+
     // Contractor Job variable and Functions//
     const [contractorFormData, setContractorFormData] = useState({
-        "optometristId":'1',
+        "optometristId": userId,
         "year" : '',
         "state" : 'Alabama',
         "city": '',
@@ -56,7 +75,7 @@ export default function JobForm (){
     });
 
     const [contractorFormDataSend, setContractorFormDataSend] = useState({
-        "optometristId":'1',
+        "optometristId": userId,
         "year" : '',
         "state" : 'Alabama',
         "city": '',
@@ -70,6 +89,14 @@ export default function JobForm (){
         "dailyHours": '',
         "patientsPerDay": ''
     });
+
+    ///this assigns "userId" to "OptometristId" whenever "userId"  changes////
+    useEffect(() => {
+        setContractorFormDataSend(prevContractorFormDataSend => ({
+        ...prevContractorFormDataSend,
+        optometristId: userId 
+        }));
+    }, [userId]);
     
     function onContractorInputChange(e){
         const { name, value } = e.target;
@@ -116,6 +143,7 @@ export default function JobForm (){
         .then((response)=>response.text())
         .then((responseText)=>{
             console.log(responseText);
+            router.push("/account");
         })
         .catch((error)=>{
             console.log(error)
@@ -127,7 +155,23 @@ export default function JobForm (){
 
     //W2 Job Form functions and variables
     const [w2FormData, setW2FormData] = useState({
-        "optometristId":'1',
+        "optometristId":userId,
+        "year" : '',
+        "state" : 'Alabama',
+        "city": '',
+        "practiceMode": 'Private Practice',
+        "setting" : "Urban",
+        "paidDaysOff" : '',
+        "healthInsuranceValue" : '',
+        "otherBenefitsValue" : '',
+        "comments": '',
+        "annualSalaryAndBonus": '',
+        "weeklyHours": '',  
+        "patientsPerWeek": ''
+      });
+
+      const [w2FormDataSend, setW2FormDataSend] = useState({
+        "optometristId":userId,
         "year" : '',
         "state" : 'Alabama',
         "city": '',
@@ -142,21 +186,13 @@ export default function JobForm (){
         "patientsPerWeek": ''
       });
 
-      const [w2FormDataSend, setW2FormDataSend] = useState({
-        "optometristId":'1',
-        "year" : '',
-        "state" : 'Alabama',
-        "city": '',
-        "practiceMode": 'Private Practice',
-        "setting" : "Urban",
-        "paidDaysOff" : '',
-        "healthInsuranceValue" : '',
-        "otherBenefitsValue" : '',
-        "comments": '',
-        "annualSalaryAndBonus": '',
-        "weeklyHours": '',
-        "patientsPerWeek": ''
-      });
+    ///this assigns "userId" to "OptometristId" whenever "userId"  changes////
+    useEffect(() => {
+        setW2FormDataSend(prevW2FormDataSend => ({
+        ...prevW2FormDataSend,
+        optometristId: userId 
+        }));
+    }, [userId]);
     
     function onW2InputChange(e){
         const { name, value } = e.target;
@@ -206,16 +242,27 @@ export default function JobForm (){
         .then((response)=>response.text())
         .then((responseText)=>{
             console.log(responseText);
+            router.push("/account");
         })
         .catch((error)=>{
             console.log(error)
         })
 
         console.log("Hello smello");
-        // window.location.href = '/account';
     };
 
 
+    //// if user is still being authorized///
+    if (loading){
+        return(
+          <></>
+        )
+    //// if user is is not authorized///
+    } else if (userId===null){
+    return (
+        <LoginFirst/>
+    )
+    }
     return (
         <Container>
             <div className="space-y-12">
@@ -382,8 +429,8 @@ export default function JobForm (){
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:max-w-xs sm:text-sm sm:leading-6"
                                                 >
                                                 <option>Private Practice</option>
-                                                <option>Retail/ Commercial</option>
-                                                <option>MD/OD</option>
+                                                <option>Retail/ Corporate</option>
+                                                <option>MD/ OD</option>
                                                 <option>Veterans Affairs</option>
                                                 <option>Hospital Based</option>
                                                 <option>Remote</option>
@@ -698,8 +745,8 @@ export default function JobForm (){
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:max-w-xs sm:text-sm sm:leading-6"
                                                 >
                                                 <option>Private Practice</option>
-                                                <option>Retail/ Commercial</option>
-                                                <option>MD/OD</option>
+                                                <option>Retail/ Corporate</option>
+                                                <option>MD/ OD</option>
                                                 <option>Veterans Affairs</option>
                                                 <option>Hospital Based</option>
                                                 <option>Remote</option>
