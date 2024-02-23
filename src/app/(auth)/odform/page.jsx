@@ -1,27 +1,29 @@
-// import {UserCircleIcon, PhotoIcon } from '@heroicons/react/24/solid'
-// import {UserCircleIcon, PhotoIcon } from '@heroicons/react/24/outline'
 'use client' 
 import { Container } from '@/components/Container'
 import { useEffect, useState } from 'react'
 import { formatCurrency } from '@/components/FormattingCurrency';
 import { formatNumbersOnlyNoDecimals } from '@/components/FormattingNumbersOnlyNoDecimals';
 import { removeNonNumericCharacters } from '@/components/RemoveNonNumericaCharacters';
-
-import { AuthLayout } from '@/components/AuthLayout'
-import { createClient } from '@supabase/supabase-js'
-import { Auth } from '@supabase/auth-ui-react'
-import { ThemeSupa } from '@supabase/auth-ui-shared'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import LoginFirst from '../loginfirst/page';
+import { SupabaseCreateClient } from '@/components/SupabaseCreateClient';
+import { nullToZero } from '@/components/NulltoZero';
 
-const supabase = createClient(
-    'https://tsrrewcbkzocevvrlsih.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcnJld2Nia3pvY2V2dnJsc2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5MDMzNjksImV4cCI6MjAxNzQ3OTM2OX0.H3QUkTtGrRxO1OvDE9kU49sILeYydS1zGdZnXZ-P29o'
-)
+
+import { AuthLayout } from '@/components/AuthLayout'
+// import { createClient } from '@supabase/supabase-js'
+import { Auth } from '@supabase/auth-ui-react'
+import { ThemeSupa } from '@supabase/auth-ui-shared'
+
+// const supabase = createClient(
+//     'https://tsrrewcbkzocevvrlsih.supabase.co',
+//     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcnJld2Nia3pvY2V2dnJsc2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5MDMzNjksImV4cCI6MjAxNzQ3OTM2OX0.H3QUkTtGrRxO1OvDE9kU49sILeYydS1zGdZnXZ-P29o'
+// )
 
 
 export default function ODForm(){
+  const supabase = SupabaseCreateClient();
   
   const [loading, setLoading] = useState(true);
 
@@ -57,8 +59,8 @@ export default function ODForm(){
 ///initialize Data, this data will be sent to backend unformatted (data with "$" and "," will not be accepted by backend)
   const [formDataSend, setFormDataSend] = useState({
     "id": userId,
-    "yearGraduated": '',
-    "initialDebt": '',
+    "yearGraduated": '0',
+    "initialDebt": '0',
     "residency": 'No',
     "gender": 'Female',
     "race": 'Caucasian',
@@ -88,14 +90,6 @@ export default function ODForm(){
       // No formatting for other fields
       formattedValue = value;
     }
-  
-  ////NEED TO FIND A WAY TO DEFAULT TO 0/////
-    // if(name === 'initialDebt'||name === 'yearGraduated') {
-    //   if (value === ""){
-    //     value=0;
-    //   }
-    // }
-
 
     //format data to display
     setFormData({ 
@@ -106,7 +100,8 @@ export default function ODForm(){
     //unformat data to send to backend
     setFormDataSend({ 
       ...formDataSend, 
-      [name]: name === 'initialDebt' ? removeNonNumericCharacters(value): value,
+      [name]: name === 'initialDebt'||name==='yearGraduated' ? nullToZero(removeNonNumericCharacters(value)): value,
+      // [name]: name === 'yearGraduated' ? nullToZero(value): value,
     });
 
     console.log(userId);
@@ -127,12 +122,11 @@ export default function ODForm(){
     .then((response)=>response.text())
     .then((responseText)=>{
       console.log(responseText);
-      // router.push("/account");
+      window.location.reload();
     })
     .catch((error)=>{
       console.log(error)
     })
-    router.push("/account");
     console.log("Hello smello");
   };
 
@@ -274,7 +268,7 @@ export default function ODForm(){
           Cancel
         </Link>
         <button
-          // href="/account"
+          href="/account" 
           type='submit'
           className="rounded-md bg-cyan-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >

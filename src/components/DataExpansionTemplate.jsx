@@ -77,7 +77,7 @@ import { FormattingRenders } from '@/components/FormattingRenders';
           <dl className="grid grid-cols-2 sm:grid-cols-12 ">
             <div className="border-t border-gray-100 px-4 py-6 sm:col-span-4 sm:px-0 bg-slate-100 rounded-l-md">
               <dt className="text-sm  leading-relaxed pl-7 text-gray-900">
-                {rowData.dailyRateAndBonus!=null && (<p>Annualized Daily Pay ({dailyRateAndBonusFormatted(rowData)})</p>)}
+                {rowData.dailyRateAndBonus!=null && (<p>Annualized Daily Pay <em>({dailyRateAndBonusFormatted(rowData)})</em></p>)}
                 {rowData.annualSalaryAndBonus!=null && (<p>Annual Salary and Bonus</p>)}
                 <p>Health Insurance Value</p>
                 <p>Other Benefits Value</p>

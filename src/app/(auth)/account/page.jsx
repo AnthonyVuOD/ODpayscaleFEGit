@@ -9,18 +9,17 @@ import { FormattingRenders } from '@/components/FormattingRenders';
 import { rowExpansionTemplate } from '@/components/DataExpansionTemplate';
 import { useRouter } from "next/navigation";
 import AccountSkeleton from "@/components/AccountSkeleton";
-import LoginFirst from "../loginfirst/page";
-
-import { Auth } from '@supabase/auth-ui-react'
-import { ThemeSupa } from '@supabase/auth-ui-shared'
-import { AuthLayout } from '@/components/AuthLayout'
-import { createClient } from '@supabase/supabase-js'
+import ODForm from "../odform/page";
+import Login from "../login/page";
 import Link from 'next/link';
+import { SupabaseCreateClient } from "@/components/SupabaseCreateClient";
 
-const supabase = createClient(
-    'https://tsrrewcbkzocevvrlsih.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcnJld2Nia3pvY2V2dnJsc2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5MDMzNjksImV4cCI6MjAxNzQ3OTM2OX0.H3QUkTtGrRxO1OvDE9kU49sILeYydS1zGdZnXZ-P29o'
-)
+// const supabase= SupabaseCreateClient();
+
+// const supabase = createClient(
+//     'https://tsrrewcbkzocevvrlsih.supabase.co',
+//     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcnJld2Nia3pvY2V2dnJsc2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5MDMzNjksImV4cCI6MjAxNzQ3OTM2OX0.H3QUkTtGrRxO1OvDE9kU49sILeYydS1zGdZnXZ-P29o'
+// )
 
 import "primereact/resources/themes/tailwind-light/theme.css";
 import 'primereact/resources/primereact.min.css';
@@ -39,14 +38,20 @@ import 'primeicons/primeicons.css';
 
 
 export default function Data() {
-///Loading...///  
-  const [loading, setLoading] = useState(true);
+///instantiante supabase client///
+  const supabase= SupabaseCreateClient();
 
 ///Router instance
   const router= useRouter();
 
-////////initialize userId///////
+///Loading...///  
+  const [loading, setLoading] = useState(true);
+
+////////initialize userId (also used to check if user is in supabase DB)///////
   const [userId, setUserId] = useState(null);
+
+////////check if user in in MySQL DB///////
+  const[userInSQL, setUserInSQL]=useState(false);
 
 
 //////set userId//////
@@ -67,7 +72,7 @@ export default function Data() {
   async function signOutUser(){
     const{error} = await supabase.auth.signOut();
     ///Need to Navigat to Main Page
-    router.push('/');
+    router.push('/data');
   }
 
 
@@ -89,12 +94,39 @@ export default function Data() {
 
 
 
-////////API call to populate jobCollection data/////////////////
-    const [jobCollection, setJobCollection] = useState([]);
+////////API call to: 1.) check if User exists in SQL DB and call to  2.) populate jobCollection data/////////////////
     
-    const optometristId = 1;
 
+    
+    ///////API to check if single OD exists on SQL DB
+    async function fetchSingleOptometrist(userId){
+      try {
+        const response = await fetch(`http://localhost:8080/api/v1/optometrists/getsingleoptometrist/`+userId);
+        if (response.ok){
+          const data = await response.json();
+          console.log("Optometrist in in MySQL (data):",data);
+          
+          if (data===null){
+            setUserInSQL(false);
+            // console.log("userInSQL: "+userInSQL);
+          } else {
+            setUserInSQL(true);
+            
+          }
+        } else {
+          console.log("Error fetching single optometrist from MySQL:", response.status, response.statusText);
+        }
 
+      } catch (error) {
+        console.log("Error fetching single optometrist: ", error.message);
+      }
+      console.log("userInSQL: "+userInSQL);
+    }
+
+    ///variable to store jobCollection
+    const [jobCollection, setJobCollection] = useState([]);
+
+    //API call to get data collection and set variable
     async function fetchData(){
       try {
         // const response = await fetch(`http://localhost:8080/api/v1/jobs/getjobsbyoptometristid/${optometristId}`);
@@ -115,13 +147,11 @@ export default function Data() {
     };
     // Auto API call to fetch data on page render
     useEffect(()=>{
+      fetchSingleOptometrist(userId);
       fetchData();
     }, [userId]);
 
-////Navigate Page/////
-    function navigateToPage(page){
-      router.push(page);
-    }
+
 
 ///////// Delete button template for each row/////////
     const deleteTemplate = (rowData) => {
@@ -138,6 +168,10 @@ export default function Data() {
         </>
       );
     };
+
+
+
+
 ////////add salary button//////
     const addSalaryTemplate = (rowData) => {
       return (
@@ -159,6 +193,9 @@ export default function Data() {
 //////delete button function ---> still needs to be updated to MySQL
     function deleteJob(jobId){
       const apiDeleteUrl = `http://localhost:8080/api/v1/jobs/deletesinglejob/`+jobId;
+
+      console.log("Initializing deleting job: "+jobId);
+
       fetch(apiDeleteUrl,{
         method:'DELETE',
         headers:{
@@ -171,18 +208,22 @@ export default function Data() {
             throw new Error(`HTTP error! Status: ${response.status}`);
             
           } else {
-            console.log(response.text());
-            console.log("success?");
+            // console.log(response.text());
+            console.log("Success in deleting job: "+jobId);
+            console.log(response);
           }
         })
         .catch(error => {
           // Handle errors during the fetch operation
           console.error('Error deleting job:', error.message);
-          alert(apiDeleteUrl); 
+          alert("Error: ", error.message); 
         });
       // console.log(jobId);
       
     };
+
+
+
 
 ///////////// Row Expansion///////////////
     const [expandedRows, setExpandedRows] = useState(null);
@@ -200,17 +241,28 @@ export default function Data() {
     const onRowCollapse = (event) => {
     };
 
+
+
 //////////// Actual interface //////////////
+
+    //if page is loading, loading skeleton is shown
     if(loading){
       return(
         <AccountSkeleton/>
       )
+
+    //if userId is not valid (supabase) (does not check if user is in SQL database)///
     } else if(userId===null){
       return (
-        <LoginFirst/>
+        <Login/>
       )
+    } 
+    ////////if user is not in SQL////
+    else if(userInSQL===false){ 
+      return (
+        <ODForm/>
+        )
     }
-
     return (
       <>
         <Header/>
@@ -243,8 +295,13 @@ export default function Data() {
                 </button>
               </div>
             </div>
+            <br />
+            <br />
 
-            <div className="mt-8 flow-root">
+            {/* <div className="sm:flex-auto text-left">
+                <h1 className="text-base font-semibold leading-6 text-gray-900">Your Previous Salaries:</h1>
+              </div> */}
+            <div className="mt-2 flow-root">
               <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                   <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">

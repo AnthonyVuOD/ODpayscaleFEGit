@@ -25,7 +25,7 @@ export default function AccountSkeleton(){
             <Header/>
             <div className="px-4 sm:px-10 lg:px-10 xl:px-20 py-5">
                 <div className="sm:flex sm:items-left flex-col">
-                    <div className="sm:flex-auto text-left">
+                    {/* <div className="sm:flex-auto text-left">
                         <h1 className="text-base font-semibold leading-6 text-gray-900">Your Account:</h1>
                     </div>
                     <div className="mt-4 sm:ml-0 sm:mt-0 sm:flex-none">
@@ -50,13 +50,13 @@ export default function AccountSkeleton(){
                         >
                         Logout
                         </button>
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className="mt-8 flow-root">
                     <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                            {/* <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg"> */}
                                 
                                 {/* <DataTable 
                                     //what data set is being mapped
@@ -155,7 +155,7 @@ export default function AccountSkeleton(){
                                                 ></Column>  
                                 </DataTable> */}
 
-                            </div>
+                            {/* </div> */}
                         </div>
                     </div>
                 </div> 

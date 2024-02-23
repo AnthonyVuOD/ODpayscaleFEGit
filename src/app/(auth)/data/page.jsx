@@ -7,6 +7,8 @@ import { Footer } from "@/components/Footer";
 import { useState, useEffect } from "react";
 import { FormattingRenders } from "@/components/FormattingRenders";
 import { rowExpansionTemplate } from "@/components/DataExpansionTemplate";
+import Link from "next/link";
+import { SupabaseCreateClient } from "@/components/SupabaseCreateClient";
 
 // import { Button } from 'primereact/button';
 // import { DataTableFilterMeta, header, representativeBodyTemplate, representativeRowFilterTemplate, loading, filters, body, filterElement, expandedRows, onRowExpand, onRowCollapse, rowExpansionTemplate, allowExpansion } from "primereact/datatable";
@@ -25,6 +27,24 @@ import "primereact/resources/themes/tailwind-light/theme.css";
 
 
 export default function Data() {
+  /////// instantiate Create client
+  const supabase = SupabaseCreateClient();
+
+  ////////initialize userId///////
+  const [userId, setUserId] = useState(null);
+
+  //////set userId//////
+  useEffect(()=>{
+    function getUserData(){
+      supabase.auth.getUser().then((value)=>{
+        if(value.data?.user){
+          setUserId(value.data.user.id);
+          console.log(userId); 
+        }
+      })
+    }
+    getUserData(); 
+  },[])
 
 ///////Declare JobCollection and API to populate JobCollection///////
     const [jobCollection, setJobCollection] = useState([]);
@@ -101,13 +121,13 @@ export default function Data() {
                 <h1 className="text-base font-semibold leading-6 text-gray-900">Explore Optometry Compensation Data:</h1>
               </div>
               <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                <a
-                  href="/login"
+                <Link
+                  href="/account"
                   type="button"
                   className="block rounded-md bg-cyan-500 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  Sign in
-                </a>
+                  {userId ? "Account" : "Sign in"}
+                </Link>
               </div>
             </div>
 

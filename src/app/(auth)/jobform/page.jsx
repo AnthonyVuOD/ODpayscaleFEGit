@@ -6,6 +6,9 @@ import { formatCurrency } from '@/components/FormattingCurrency';
 import { removeNonNumericCharacters } from '@/components/RemoveNonNumericaCharacters';
 import { useEffect, useState } from 'react';
 import LoginFirst from '../loginfirst/page';
+import AccountSkeleton from '@/components/AccountSkeleton';
+import { SupabaseCreateClient } from '@/components/SupabaseCreateClient';
+import { nullToZero } from '@/components/NulltoZero';
 
 // import { Switch } from '@headlessui/react';
 // import { RadioButton } from 'primereact/radiobutton';
@@ -17,10 +20,10 @@ import { ThemeSupa } from '@supabase/auth-ui-shared'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-const supabase = createClient(
-    'https://tsrrewcbkzocevvrlsih.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcnJld2Nia3pvY2V2dnJsc2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5MDMzNjksImV4cCI6MjAxNzQ3OTM2OX0.H3QUkTtGrRxO1OvDE9kU49sILeYydS1zGdZnXZ-P29o'
-)
+// const supabase = createClient(
+//     'https://tsrrewcbkzocevvrlsih.supabase.co',
+//     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcnJld2Nia3pvY2V2dnJsc2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5MDMzNjksImV4cCI6MjAxNzQ3OTM2OX0.H3QUkTtGrRxO1OvDE9kU49sILeYydS1zGdZnXZ-P29o'
+// )
 
 
 // function classNames(...classes) {
@@ -28,6 +31,9 @@ const supabase = createClient(
 // }
 
 export default function JobForm (){
+    ///instantiante supabase///
+    const supabase= SupabaseCreateClient();
+
     /// variable while user is being authorized////
     const [loading, setLoading] = useState(true);
 
@@ -76,18 +82,18 @@ export default function JobForm (){
 
     const [contractorFormDataSend, setContractorFormDataSend] = useState({
         "optometristId": userId,
-        "year" : '',
+        "year" : '0',
         "state" : 'Alabama',
         "city": '',
         "practiceMode": 'Private Practice',
         "setting" : "Urban",
-        "paidDaysOff" : '',
-        "healthInsuranceValue" : '',
-        "otherBenefitsValue" : '',
+        "paidDaysOff" : '0',
+        "healthInsuranceValue" : '0',
+        "otherBenefitsValue" : '0',
         "comments": '',
-        "dailyRateAndBonus": '',
-        "dailyHours": '',
-        "patientsPerDay": ''
+        "dailyRateAndBonus": '0',
+        "dailyHours": '0',
+        "patientsPerDay": '0'
     });
 
     ///this assigns "userId" to "OptometristId" whenever "userId"  changes////
@@ -124,9 +130,12 @@ export default function JobForm (){
 
         setContractorFormDataSend({ 
             ...contractorFormDataSend,
-            [name]: (name === 'healthInsuranceValue'||name === 'dailyRateAndBonus'||name === 'otherBenefitsValue') ? removeNonNumericCharacters(value) : value
+            // [name]: (name === 'healthInsuranceValue'||name === 'dailyRateAndBonus'||name === 'otherBenefitsValue') ? removeNonNumericCharacters(value) : value,
+            [name]: (name === 'healthInsuranceValue'||name === 'dailyRateAndBonus'||name === 'otherBenefitsValue'||name === 'year')||name === 'paidDaysOff'||name === 'dailyHours'||name === 'patientsPerDay' ? nullToZero(removeNonNumericCharacters(value)) : value,
 
+            
         });
+        console.log(contractorFormDataSend);
     }
 
     function createContractorJob(e){
@@ -172,18 +181,18 @@ export default function JobForm (){
 
       const [w2FormDataSend, setW2FormDataSend] = useState({
         "optometristId":userId,
-        "year" : '',
+        "year" : '0',
         "state" : 'Alabama',
         "city": '',
         "practiceMode": 'Private Practice',
         "setting" : "Urban",
-        "paidDaysOff" : '',
-        "healthInsuranceValue" : '',
-        "otherBenefitsValue" : '',
+        "paidDaysOff" : '0',
+        "healthInsuranceValue" : '0',
+        "otherBenefitsValue" : '0',
         "comments": '',
-        "annualSalaryAndBonus": '',
-        "weeklyHours": '',
-        "patientsPerWeek": ''
+        "annualSalaryAndBonus": '0',
+        "weeklyHours": '0',
+        "patientsPerWeek": '0'
       });
 
     ///this assigns "userId" to "OptometristId" whenever "userId"  changes////
@@ -222,8 +231,11 @@ export default function JobForm (){
 
         setW2FormDataSend({ 
             ...w2FormDataSend,
-            [name]: (name === 'healthInsuranceValue'||name === 'annualSalaryAndBonus'||name === 'otherBenefitsValue') ? removeNonNumericCharacters(value) : value
+            // [name]: (name === 'healthInsuranceValue'||name === 'annualSalaryAndBonus'||name === 'otherBenefitsValue') ? removeNonNumericCharacters(value) : value,
+            [name]: (name === 'healthInsuranceValue'||name === 'annualSalaryAndBonus'||name === 'otherBenefitsValue'||name === 'year')||name === 'paidDaysOff'||name === 'weeklyHours'||name === 'patientsPerWeek' ? nullToZero(removeNonNumericCharacters(value)) : value,
+
         });
+        console.log(w2FormDataSend)
     }
 
     
@@ -255,7 +267,7 @@ export default function JobForm (){
     //// if user is still being authorized///
     if (loading){
         return(
-          <></>
+          <AccountSkeleton/>
         )
     //// if user is is not authorized///
     } else if (userId===null){
@@ -580,11 +592,11 @@ export default function JobForm (){
                                     </div>
                                 </div>
                                 <div className="mt-6 flex items-center justify-end gap-x-6">
-                                    <a
+                                    <Link
                                         href="/account" 
                                         className="text-sm font-semibold leading-6 text-gray-900">
                                         Cancel
-                                    </a>
+                                    </Link>
                                     <button
                                         href="/account" 
                                         type="submit"

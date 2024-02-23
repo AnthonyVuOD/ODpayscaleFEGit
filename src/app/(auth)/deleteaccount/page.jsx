@@ -9,17 +9,22 @@ import { ThemeSupa } from '@supabase/auth-ui-shared'
 import Link from 'next/link';
 import LoginFirst from '../loginfirst/page'
 import { useRouter } from 'next/navigation'
+import AccountSkeleton from '@/components/AccountSkeleton'
+import { SupabaseCreateClient } from '@/components/SupabaseCreateClient'
 
-const supabase = createClient(
-    'https://tsrrewcbkzocevvrlsih.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcnJld2Nia3pvY2V2dnJsc2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5MDMzNjksImV4cCI6MjAxNzQ3OTM2OX0.H3QUkTtGrRxO1OvDE9kU49sILeYydS1zGdZnXZ-P29o'
-)
+// const supabase = createClient(
+//     'https://tsrrewcbkzocevvrlsih.supabase.co',
+//     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcnJld2Nia3pvY2V2dnJsc2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5MDMzNjksImV4cCI6MjAxNzQ3OTM2OX0.H3QUkTtGrRxO1OvDE9kU49sILeYydS1zGdZnXZ-P29o'
+// )
 
 // export const metadata = {
 //   title: 'Delete account',
 // }
 
 export default function DeleteAccount() {
+///instantiante supabase///
+  const supabase= SupabaseCreateClient();
+
 ///Router instance
   const router = useRouter();
  
@@ -49,8 +54,9 @@ export default function DeleteAccount() {
   /////NEEED TO ALSO DELETE USER FROM SUPABASE!!!!!
 /////function to delete user////
   const deleteUser = () => {
-    console.log(userId)
-    // fetch(`http://example.com/api/users/${userId}`, {
+    console.log("Trying to delete user: "+userId);
+
+
     fetch("http://localhost:8080/api/v1/optometrists/deletesingleoptometrist/"+userId, {
       method: 'DELETE',
       headers: {
@@ -60,28 +66,33 @@ export default function DeleteAccount() {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          throw new Error(`HTTP error deleting from MySQL! Status: ${response.status}`);
         }
         return response.json(); // You can remove this if not expecting JSON response
       })
       .then((data) => {
         // Handle success or additional actions after deletion
-        console.log('User deleted successfully:', data);
+        console.log('User deleted successfully from MySQL:', data);
         ///redirect!
         
       })
       .catch((error) => {
         // Handle errors
-        console.error('Error deleting user:', error);
+        console.error('Error deleting user from mySQL:', error);
       })
-      ////does not work!!!!
-      router.push("/account");
+
+
+      alert("User Deleted!");
+
+      const{error} = supabase.auth.signOut();
+  
+      router.push("/data");
   };
 
     //// if user is still being authorized///
     if(loading){
       return(
-        <></>
+        <AccountSkeleton/>
       )
     //// if user is is not authorized///
     } else if(userId===null){
@@ -99,7 +110,7 @@ export default function DeleteAccount() {
           </>
         }
       >
-        <form
+        <div
           className="flex flex-col items-center"
           // onClick={deleteUser}
         >
@@ -112,9 +123,11 @@ export default function DeleteAccount() {
               >
             Delete Account
           </button>
-          <br />
+          {/* <br /> */}
           <a 
               href='/account'
+              className="text-sm pt-3 font-semibold leading-6 text-gray-900"
+
               // type="submit" 
               // color="cyan" 
               // className="mt-0 w-full">
@@ -122,7 +135,7 @@ export default function DeleteAccount() {
               >
             Cancel
           </a>
-        </form>
+        </div>
       </AuthLayout>
     )
 

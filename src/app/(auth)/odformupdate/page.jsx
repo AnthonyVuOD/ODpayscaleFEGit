@@ -8,6 +8,9 @@ import { formatCurrency } from '@/components/FormattingCurrency';
 import { formatNumbersOnlyNoDecimals } from '@/components/FormattingNumbersOnlyNoDecimals';
 import { removeNonNumericCharacters } from '@/components/RemoveNonNumericaCharacters';
 import LoginFirst from '../loginfirst/page';
+import AccountSkeleton from '@/components/AccountSkeleton';
+import { SupabaseCreateClient } from '@/components/SupabaseCreateClient';
+import { nullToZero } from '@/components/NulltoZero';
 
 import { AuthLayout } from '@/components/AuthLayout'
 import { createClient } from '@supabase/supabase-js'
@@ -16,18 +19,22 @@ import { ThemeSupa } from '@supabase/auth-ui-shared'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-const supabase = createClient(
-    'https://tsrrewcbkzocevvrlsih.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcnJld2Nia3pvY2V2dnJsc2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5MDMzNjksImV4cCI6MjAxNzQ3OTM2OX0.H3QUkTtGrRxO1OvDE9kU49sILeYydS1zGdZnXZ-P29o'
-)
+// const supabase = createClient(
+//     'https://tsrrewcbkzocevvrlsih.supabase.co',
+//     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcnJld2Nia3pvY2V2dnJsc2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5MDMzNjksImV4cCI6MjAxNzQ3OTM2OX0.H3QUkTtGrRxO1OvDE9kU49sILeYydS1zGdZnXZ-P29o'
+// )
 
 
 
 export default function ODFormUpdate() {
 
+  ///instantiante supabase///
+  const supabase= SupabaseCreateClient();
+
 ///variable while authorizing user  
   const [loading, setLoading] = useState(true);
 
+////router
   const router = useRouter();
 
 ////////initialize userId///////
@@ -111,7 +118,8 @@ export default function ODFormUpdate() {
 
     setFormDataUpdateSend({ 
       ...formDataUpdateSend, 
-      [name]: name === 'initialDebt' ? removeNonNumericCharacters(value) : value
+      // [name]: name === 'initialDebt' ? removeNonNumericCharacters(value) : value
+      [name]: name === 'initialDebt'||name==='yearGraduated' ? nullToZero(removeNonNumericCharacters(value)): value,
     });
   }
 
@@ -119,11 +127,8 @@ export default function ODFormUpdate() {
 ///update data to back-end
   function updateOptometristAccount(e){
     e.preventDefault();
-    // const router = useRouter();
 
-    // fetch("http://localhost:8080/api/v1/optometrists/updateoptometrist/"+"f12bf434-f279-4086-a550-aadb0c0cc467",{
     fetch("http://localhost:8080/api/v1/optometrists/updateoptometrist/"+userId,{
-
       method:"PUT",
       headers: {
         'Content-Type': 'application/json',
@@ -140,14 +145,13 @@ export default function ODFormUpdate() {
     .catch((error)=>{
       console.log('Error updating user data:', error);
     })
-
     console.log("Hello smello");
   };
 
   //// if user is still being authorized///
   if(loading){
     return(
-      <></>
+      <AccountSkeleton/>
     )
   //// if user is is not authorized///
   } else if(userId===null){
@@ -274,14 +278,13 @@ export default function ODFormUpdate() {
       </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6 pb-10">
-        <a
+        <Link
           href="/account"
           className="text-sm font-semibold leading-6 text-gray-900"
         >
           Cancel
-        </a>
+        </Link>
         <button
-          // href="/account"
           type='submit'
           className="rounded-md bg-cyan-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
