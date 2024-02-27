@@ -43,6 +43,9 @@ export default function JobForm (){
     ////////initialize userId///////
     const [userId, setUserId] = useState(null);
 
+    ///variable to make sure user enterd required fields///
+    const [isRequiredFieldsNull,setIsRequiredFieldsNull] = useState(false);
+
     //////set userId//////
     useEffect(()=>{
       async function getUserData(){
@@ -140,6 +143,17 @@ export default function JobForm (){
 
     function createContractorJob(e){
         e.preventDefault();
+
+        if (contractorFormData.dailyRateAndBonus==="" || 
+            contractorFormData.dailyHours==="" || 
+            contractorFormData.patientsPerDay==="" || 
+            contractorFormData.year==="") {
+            // If any of the required fields are empty, show an alert or handle the error as needed
+            alert("Please at least fill out required fields.");
+            setIsRequiredFieldsNull(true);
+            return; // Stop further execution
+        }
+
 
         fetch("http://localhost:8080/api/v1/contractorjobs/createcontractorjob",{
             method:"POST",
@@ -243,6 +257,16 @@ export default function JobForm (){
     function createW2Job(e){
         e.preventDefault();
 
+        if (w2FormData.annualSalaryAndBonuss==="" || 
+            w2FormData.weeklyHours==="" || 
+            w2FormData.patientsPerWeek==="" || 
+            w2FormData.year==="") {
+            // If any of the required fields are empty, show an alert or handle the error as needed
+            alert("Please at least fill out required fields.");
+            setIsRequiredFieldsNull(true);
+            return; // Stop further execution
+        }
+
         fetch("http://localhost:8080/api/v1/w2jobs/createw2job",{
             method:"POST",
             headers: {
@@ -328,6 +352,10 @@ export default function JobForm (){
                                                 pattern="[0-9]{0,4}"
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                                                 />
+                                                {/* Conditional rendering to display red text if the field is empty */}
+                                                {isRequiredFieldsNull===true && (
+                                                    <p className="text-sm font-medium text-red-500 mt-1">   *Required field</p>
+                                                )}
                                             </div>
                                         </div>
 
@@ -485,6 +513,10 @@ export default function JobForm (){
                                                 placeholder='$'
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                                                 />
+                                                {/* Conditional rendering to display red text if the field is empty */}
+                                                {isRequiredFieldsNull===true && (
+                                                    <p className="text-sm font-medium text-red-500 mt-1">   *Required field</p>
+                                                )}
                                             </div>
                                         </div>
 
@@ -551,6 +583,10 @@ export default function JobForm (){
                                                 onChange={onW2InputChange}
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                                                 />
+                                                {/* Conditional rendering to display red text if the field is empty */}
+                                                {isRequiredFieldsNull===true && (
+                                                    <p className="text-sm font-medium text-red-500 mt-1">   *Required field</p>
+                                                )}
                                             </div>
                                         </div>
 
@@ -567,6 +603,10 @@ export default function JobForm (){
                                                 onChange={onW2InputChange}
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                                                 />
+                                                {/* Conditional rendering to display red text if the field is empty */}
+                                                {isRequiredFieldsNull===true && (
+                                                    <p className="text-sm font-medium text-red-500 mt-1">   *Required field</p>
+                                                )}
                                             </div>
                                         </div>
 
@@ -644,7 +684,13 @@ export default function JobForm (){
                                                 onChange={onContractorInputChange}
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                                                 />
+                                                {/* Conditional rendering to display red text if the field is empty */}
+                                                {isRequiredFieldsNull===true && (
+                                                    <p className="text-sm font-medium text-red-500 mt-1">   *Required field</p>
+                                                )}
                                             </div>
+                                            
+                                                
                                         </div>
 
                                         <div className="sm:col-span-4">
@@ -801,6 +847,10 @@ export default function JobForm (){
                                                 onChange={onContractorInputChange}
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                                                 />
+                                                {/* Conditional rendering to display red text if the field is empty */}
+                                                {isRequiredFieldsNull===true && (
+                                                    <p className="text-sm font-medium text-red-500 mt-1">   *Required field</p>
+                                                )}
                                             </div>
                                         </div>
 
@@ -867,6 +917,10 @@ export default function JobForm (){
                                                 onChange={onContractorInputChange}
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                                                 />
+                                                {/* Conditional rendering to display red text if the field is empty */}
+                                                {isRequiredFieldsNull===true && (
+                                                    <p className="text-sm font-medium text-red-500 mt-1">   *Required field</p>
+                                                )}
                                             </div>
                                         </div>
 
@@ -883,6 +937,10 @@ export default function JobForm (){
                                                 onChange={onContractorInputChange}
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
                                                 />
+                                                {/* Conditional rendering to display red text if the field is empty */}
+                                                {isRequiredFieldsNull===true && (
+                                                    <p className="text-sm font-medium text-red-500 mt-1">   *Required field</p>
+                                                )}
                                             </div>
                                         </div>
 

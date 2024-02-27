@@ -192,11 +192,11 @@ export default function Data() {
 
 //////delete button function ---> still needs to be updated to MySQL
     function deleteJob(jobId){
-      const apiDeleteUrl = `http://localhost:8080/api/v1/jobs/deletesinglejob/`+jobId;
+      // const apiDeleteUrl = "http://localhost:8080/api/v1/jobs/deletesinglejob/"+jobId;
 
       console.log("Initializing deleting job: "+jobId);
 
-      fetch(apiDeleteUrl,{
+      fetch("http://localhost:8080/api/v1/jobs/deletesinglejob/"+jobId,{
         method:'DELETE',
         headers:{
           'Content-Type': 'application/json',
@@ -210,7 +210,7 @@ export default function Data() {
           } else {
             // console.log(response.text());
             console.log("Success in deleting job: "+jobId);
-            console.log(response);
+            console.log(response.data);
           }
         })
         .catch(error => {
