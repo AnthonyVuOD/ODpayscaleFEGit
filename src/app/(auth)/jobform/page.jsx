@@ -295,9 +295,9 @@ export default function JobForm (){
         )
     //// if user is is not authorized///
     } else if (userId===null){
-    return (
-        <LoginFirst/>
-    )
+        return (
+            <LoginFirst/>
+        )
     }
     return (
         <Container>
@@ -539,7 +539,7 @@ export default function JobForm (){
 
                                         <div className="sm:col-span-4">
                                             <label htmlFor="otherBenefitsValue" className="block text-sm font-medium leading-6 text-gray-900">
-                                                Estimated employer annual contribution to other benefits (Licensure, CE, insurance, etc.):
+                                                Estimated employer annual contribution to other benefits (Retirement, Licensure, CE, malpractice, dues, etc.):
                                             </label>
                                             <div className="mt-2">
                                                 <input
@@ -873,7 +873,7 @@ export default function JobForm (){
 
                                         <div className="sm:col-span-4">
                                             <label htmlFor="otherBenefitsValue" className="block text-sm font-medium leading-6 text-gray-900">
-                                                Estimated employer annual contribution to other benefits (Licensure, CE, Insurance, etc.):
+                                                Estimated employer annual contribution to other benefits (Retirement, Licensure, CE, malpractice, dues, etc.):
                                             </label>
                                             <div className="mt-2">
                                                 <input
@@ -957,7 +957,7 @@ export default function JobForm (){
                                                 value={contractorFormData.comments}
                                                 onChange={onContractorInputChange}
                                                 maxLength="250"
-                                                placeholder='Please include other salary details or leave this blank. Helpful information would include bonus structure, revenue collected, weekends, etc.'
+                                                placeholder='Please include other salary details such as how many days per week or month you are able to secure this job at this per diem. Other helpful information would include bonus structure, revenue collected, weekends, etc.'
                                                 />
                                                <p className="text-right block text-xs font-small leading-6 text-gray-900">Max character count: {contractorFormData.comments.length}/250</p> 
                                             </div>

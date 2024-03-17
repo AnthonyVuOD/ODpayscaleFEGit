@@ -14,13 +14,6 @@ import Login from "../login/page";
 import Link from 'next/link';
 import { SupabaseCreateClient } from "@/components/SupabaseCreateClient";
 
-// const supabase= SupabaseCreateClient();
-
-// const supabase = createClient(
-//     'https://tsrrewcbkzocevvrlsih.supabase.co',
-//     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcnJld2Nia3pvY2V2dnJsc2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5MDMzNjksImV4cCI6MjAxNzQ3OTM2OX0.H3QUkTtGrRxO1OvDE9kU49sILeYydS1zGdZnXZ-P29o'
-// )
-
 import "primereact/resources/themes/tailwind-light/theme.css";
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
@@ -36,8 +29,8 @@ import 'primeicons/primeicons.css';
 // import { PaperClipIcon } from '@heroicons/react/20/solid'
 // import { Container } from "@/components/Container"
 
-
 export default function Data() {
+
 ///instantiante supabase client///
   const supabase= SupabaseCreateClient();
 
@@ -51,8 +44,7 @@ export default function Data() {
   const [userId, setUserId] = useState(null);
 
 ////////check if user in in MySQL DB///////
-  const[userInSQL, setUserInSQL]=useState(false);
-
+  const[userInSQL, setUserInSQL] = useState(false);
 
 //////set userId//////
   useEffect(()=>{
@@ -76,27 +68,11 @@ export default function Data() {
   }
 
 
-// Formatting rendered data
+  // Formatting rendered currency data
   const { currencyBodyTemplate } = FormattingRenders();
-// const {healthInsuranceFormatted} = FormattingRenders();
-// const {otherBenefitsFormatted} = FormattingRenders();
-// const {paidDaysOffValueFormatted} = FormattingRenders();
-// const {compPerPatientFormatted} = FormattingRenders();
-// const {compPerHourFormatted} = FormattingRenders();
-// const {annualSalaryAndBonusFormatted} = FormattingRenders()
-// const {dailyRateAndBonusFormatted} = FormattingRenders()
-// const {annualizedDailyRateAndBonusFormatted} = FormattingRenders()
-// const {paidDaysOffFormatted} = FormattingRenders();
-// const {patientsPerDayFormatted} = FormattingRenders();
-// const {patientsPerWeekFormatted} = FormattingRenders();
-// const {dailyHoursFormatted} = FormattingRenders();
-// const {weeklyHoursFormatted} = FormattingRenders();
-
 
 
 ////////API call to: 1.) check if User exists in SQL DB and call to  2.) populate jobCollection data/////////////////
-    
-
     
     ///////API to check if single OD exists on SQL DB
     async function fetchSingleOptometrist(userId){
@@ -145,6 +121,7 @@ export default function Data() {
         console.log("Error fetching data: ", error.message);
       }
     };
+
     // Auto API call to fetch data on page render
     useEffect(()=>{
       fetchSingleOptometrist(userId);
@@ -190,7 +167,7 @@ export default function Data() {
 
 
 
-//////delete button function ---> still needs to be updated to MySQL
+//////delete button function 
     function deleteJob(jobId){
       // const apiDeleteUrl = "http://localhost:8080/api/v1/jobs/deletesinglejob/"+jobId;
 
@@ -211,6 +188,7 @@ export default function Data() {
             // console.log(response.text());
             console.log("Success in deleting job: "+jobId);
             console.log(response.data);
+            window.location.reload();
           }
         })
         .catch(error => {
@@ -218,7 +196,6 @@ export default function Data() {
           console.error('Error deleting job:', error.message);
           alert("Error: ", error.message); 
         });
-      // console.log(jobId);
       
     };
 
@@ -243,7 +220,7 @@ export default function Data() {
 
 
 
-//////////// Actual interface //////////////
+//////////// User Interface //////////////
 
     //if page is loading, loading skeleton is shown
     if(loading){
@@ -266,7 +243,8 @@ export default function Data() {
     return (
       <>
         <Header/>
-          <div className="px-4 sm:px-10 lg:px-10 xl:px-20 py-5">
+          <div className="px-4 md:px-10 lg:px-10 xl:px-20 py-5">
+          {/* <div className="px-4 sm:px-10 lg:px-10 xl:px-20 py-5"> */}
             <div className="sm:flex sm:items-left flex-col">
               <div className="sm:flex-auto text-left">
                 <h1 className="text-base font-semibold leading-6 text-gray-900">Your Account:</h1>
@@ -302,9 +280,12 @@ export default function Data() {
                 <h1 className="text-base font-semibold leading-6 text-gray-900">Your Previous Salaries:</h1>
               </div> */}
             <div className="mt-2 flow-root">
-              <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                  <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+            <div className="-mx-4 -my-2 overflow-x-auto lg:-mx-6 xl:-mx-8">
+              {/* <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8"> */}
+              <div className="inline-block min-w-0 py-2 align-middle lg:px-6 xl:px-8">
+                {/* <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"> */}
+                <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 lg:rounded-lg">
+                  {/* <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg"> */}
 
                     <DataTable 
                       //what data set is being mapped
@@ -349,14 +330,15 @@ export default function Data() {
 
                         <Column 
                                 expander={allowExpansion}
-                                style={{ width: '3%' }}
+                                style={{ width: '5rem' }}
                                 >
                                 </Column>
                                 
                         <Column  
                                 field="year" 
                                 header="Year" 
-                                sortable style={{ width: '2%' }}
+                                sortable 
+                                style={{ width: '10rem' }}
                                 ></Column>
 
                         <Column 
@@ -364,18 +346,18 @@ export default function Data() {
                                 header="State" 
                                 filterPlaceholder="Search"
                                 showFilterMenu={false} 
-                                filter 
-                                style={{ width: '10%' }}
+                                // filter 
+                                style={{ minWidth: '12rem' }}
                                 ></Column>
 
-                        <Column 
+                        {/* <Column 
                                 field="city" 
                                 header="City/ County" 
                                 filterPlaceholder="Search" 
                                 showFilterMenu={false} 
                                 filter 
                                 style={{ width: '10%' }}
-                                ></Column>
+                                ></Column> */}
 
                         <Column 
                         // className="px-3 py-3.5 text-left text-sm text-gray-900" 
@@ -383,9 +365,9 @@ export default function Data() {
                                 header="Setting" 
                                 filterPlaceholder="Search" 
                                 showFilterMenu={false}
-                                filter
+                                // filter
                                 filterField="setting" 
-                                style={{ width: '10%' }}
+                                style={{ minWidth: '12rem' }}
                                 ></Column>    
 
                         <Column 
@@ -393,13 +375,13 @@ export default function Data() {
                                 header="Annualized Total Comp" 
                                 body={currencyBodyTemplate}
                                 sortable 
-                                style={{ width: '10%' }}
+                                style={{ width: '15rem' }}
                                 ></Column>
 
                         <Column 
                                 header={addSalaryTemplate} 
                                 body={deleteTemplate}
-                                style={{ width: '13%' }}
+                                style={{ width: '15rem' }}
                                 ></Column>  
                     </DataTable>
 

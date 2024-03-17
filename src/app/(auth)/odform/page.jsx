@@ -16,23 +16,22 @@ import { AuthLayout } from '@/components/AuthLayout'
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 
-// const supabase = createClient(
-//     'https://tsrrewcbkzocevvrlsih.supabase.co',
-//     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcnJld2Nia3pvY2V2dnJsc2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5MDMzNjksImV4cCI6MjAxNzQ3OTM2OX0.H3QUkTtGrRxO1OvDE9kU49sILeYydS1zGdZnXZ-P29o'
-// )
-
 
 export default function ODForm(){
+
+  ///Instantiate supabase
   const supabase = SupabaseCreateClient();
+
+  ///instantiate router 
+  const router = useRouter();
   
+  ///loading variable
   const [loading, setLoading] = useState(true);
 
-  const router = useRouter();
-
-////////initialize userId///////
+  ////////initialize userId///////
   const [userId, setUserId] = useState(null);
 
-//////Find and set userId if user is authorized//////
+  //////Find and set userId if user is authorized//////
   useEffect(()=>{
     async function getUserData(){
       await supabase.auth.getUser().then((value)=>{
@@ -46,7 +45,7 @@ export default function ODForm(){
     getUserData(); 
   },[])
 
-///initialize Data, this data will be displayed to user formatted
+  ///initialize Data, this data will be formatted and displayed to user 
   const [formData, setFormData] = useState({
     "id": userId,
     "yearGraduated": '',
@@ -56,7 +55,7 @@ export default function ODForm(){
     "race": 'Caucasian',
   });
 
-///initialize Data, this data will be sent to backend unformatted (data with "$" and "," will not be accepted by backend)
+  ///initialize Data, this data will be sent to backend unformatted (data with "$" and "," will not be accepted by backend)
   const [formDataSend, setFormDataSend] = useState({
     "id": userId,
     "yearGraduated": '0',
@@ -66,7 +65,7 @@ export default function ODForm(){
     "race": 'Caucasian',
   });
 
-///this assigns "UserId" to "id" whenever "userId"  changes////
+  ///this assigns "UserId" to "id" whenever "userId"  changes////
   useEffect(() => {
     setFormDataSend(prevFormDataSend => ({
       ...prevFormDataSend,
@@ -108,6 +107,8 @@ export default function ODForm(){
     console.log(formDataSend)
   }
 
+
+  /////API call to create user/ Optometrist in MySQL
   function createOptometristAccount(e){
     e.preventDefault();
 
@@ -131,6 +132,7 @@ export default function ODForm(){
   };
 
 
+  //////User Interface
   if(loading){
     return(
       <></>

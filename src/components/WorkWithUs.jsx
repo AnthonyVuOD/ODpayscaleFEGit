@@ -5,10 +5,11 @@ const links = [
     // { name: 'Meet our leadership', href: '#' },
   ]
   const stats = [
-    { name: 'Active US ODs', value: '40,000+' },
-    { name: 'Annual graduating ODs', value: '1,700+' },
-    { name: 'Average 2022 graduating OD debt', value: '$225,000+' },
     { name: 'US Optometry Market Size', value: '$20+ Billion' },
+    { name: 'US Optometrists', value: '40,000+' },
+    { name: 'Annual Graduating ODs', value: '1,700+' },
+    { name: 'Average OD Graduate Debt', value: '$225,000+' },
+    
   ]
   
   export default function WorkWithUs() {
@@ -49,7 +50,7 @@ const links = [
           <div className="mx-auto max-w-2xl lg:mx-0">
             <h2 className="text-2xl font-bold tracking-tight text-gray-100 sm:text-4xl">Helping you determine your fair market value.</h2>
             <p className="mt-6 text-lg leading-8 text-gray-100">
-            With this application, you will have a better understanding of your fair market value and you will help other ODs with theirs. 
+            With this tool, you will have a better understanding of your fair market value and you will help other ODs with theirs. 
             </p><br/>
           </div>
           <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">

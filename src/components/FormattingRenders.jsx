@@ -5,12 +5,12 @@ export function FormattingRenders(){
     ////formatting normalizedAnnualComp rounded to nearest dollar//////
     const currencyBodyTemplate = (rowData) => {
         const formattedCurrencyNormalizedAnnualComp = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0,
-      }).format(rowData.normalizedAnnualComp);  
+            style: 'currency',
+            currency: 'USD',
+            maximumFractionDigits: 0,
+            }).format(rowData.normalizedAnnualComp);  
   
-    return <span>{formattedCurrencyNormalizedAnnualComp}</span>; 
+        return <span>{formattedCurrencyNormalizedAnnualComp}</span>; 
     };
 
     /// formatting Health Insurance Value rounded to nearest dollar
@@ -23,6 +23,17 @@ export function FormattingRenders(){
       
         return <span>{formattedCurrencyHealthInsuranceValue}</span>; 
     };
+
+    //  /// formatting Retirement benefits Value rounded to nearest dollar
+    //  const retirementBenefitsFormatted = (rowData) => {
+    //     const formattedCurrencyRetirementBenefitsValue = new Intl.NumberFormat('en-US', {
+    //       style: 'currency',
+    //       currency: 'USD',
+    //       maximumFractionDigits: 0,
+    //       }).format(rowData.retirementBenefitsValue);  
+      
+    //     return <span>{formattedCurrencyRetirementBenefitsValue}</span>; 
+    // };
     
     /// formatting Other benefits Value rounded to nearest dollar
     const otherBenefitsFormatted = (rowData) => {
@@ -125,6 +136,14 @@ export function FormattingRenders(){
         return <span>{patientsPerWeek}</span>;
     };
 
+    // const patientsPerHourFormatted = (rowData) => {
+    //     const patientsPerWeek = new Intl.NumberFormat('en-US', {
+    //         maximumFractionDigits: 2,
+    //         }).format(rowData.patientsPerHour);
+        
+    //     return <span>{patientsPerHour}</span>;
+    // };
+
     const dailyHoursFormatted = (rowData) => {
         const dailyHours = new Intl.NumberFormat('en-US', {
             maximumFractionDigits: 2,
@@ -132,6 +151,7 @@ export function FormattingRenders(){
         
         return <span>{dailyHours}</span>;
     };
+    
     const weeklyHoursFormatted = (rowData) => {
         const weeklyHours = new Intl.NumberFormat('en-US', {
             maximumFractionDigits: 2,

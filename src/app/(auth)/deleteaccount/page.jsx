@@ -1,40 +1,26 @@
 'use client'
 import { AuthLayout } from '@/components/AuthLayout'
-import { Button } from '@/components/Button'
-import { SelectField, TextField } from '@/components/Fields'
 import { useState,useEffect } from 'react'
-import { createClient } from '@supabase/supabase-js'
-import { Auth } from '@supabase/auth-ui-react'
-import { ThemeSupa } from '@supabase/auth-ui-shared'
-import Link from 'next/link';
 import LoginFirst from '../loginfirst/page'
 import { useRouter } from 'next/navigation'
 import AccountSkeleton from '@/components/AccountSkeleton'
 import { SupabaseCreateClient } from '@/components/SupabaseCreateClient'
 
-// const supabase = createClient(
-//     'https://tsrrewcbkzocevvrlsih.supabase.co',
-//     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcnJld2Nia3pvY2V2dnJsc2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5MDMzNjksImV4cCI6MjAxNzQ3OTM2OX0.H3QUkTtGrRxO1OvDE9kU49sILeYydS1zGdZnXZ-P29o'
-// )
-
-// export const metadata = {
-//   title: 'Delete account',
-// }
-
 export default function DeleteAccount() {
-///instantiante supabase///
+
+///supabase instance///
   const supabase= SupabaseCreateClient();
 
 ///Router instance
   const router = useRouter();
  
-///variable while authorizing user  
+///loading variable  
   const [loading, setLoading] = useState(true);
 
-////////initialize userId///////
+///userID variable
   const [userId, setUserId] = useState(null);
 
-//////set userId//////
+////// Get and set userId//////
   useEffect(()=>{
     function getUserData(){
       supabase.auth.getUser().then((value)=>{
@@ -47,16 +33,14 @@ export default function DeleteAccount() {
       })
     }
     getUserData(); 
-     
   },[])
 
 
-  /////NEEED TO ALSO DELETE USER FROM SUPABASE!!!!!
-/////function to delete user////
-  const deleteUser = () => {
+/////function to delete user from Supabase/MySQL and cascade all of Salary data////
+  const deleteUser = async () => {
     console.log("Trying to delete user: "+userId);
 
-
+    ////Delete from MySQL//////
     fetch("http://localhost:8080/api/v1/optometrists/deletesingleoptometrist/"+userId, {
       method: 'DELETE',
       headers: {
@@ -81,13 +65,24 @@ export default function DeleteAccount() {
         console.error('Error deleting user from mySQL:', error);
       })
 
+    ///////Delete from supabase Auth///////
+    try {
+      ///calls supabase "delete_user" function
+      await supabase.rpc('delete_user');
+      console.log('Delete RPC called');
 
-      alert("User Deleted!");
+    } catch (error) {
+      console.error('Error deleting user:', error.message);
+    }
 
-      const{error} = supabase.auth.signOut();
-  
-      router.push("/data");
+    alert("User Deleted!");
+    const{error} = supabase.auth.signOut();
+    router.push("/data");
   };
+
+
+
+////////////USER INTERFACE///////
 
     //// if user is still being authorized///
     if(loading){
