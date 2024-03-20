@@ -46,7 +46,8 @@ export default function LoginFirst() {
                     },
                   },
             }}
-            providers={['google', 'facebook']}
+            providers={['google']}
+            // , 'facebook'
         />
       </AuthLayout>
     </>

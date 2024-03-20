@@ -50,7 +50,8 @@ export default function Login() {
                     },
                   },
             }}
-            providers={['google', 'facebook']}
+            providers={['google']}
+            // , 'facebook'
         />
       </AuthLayout>
     </>

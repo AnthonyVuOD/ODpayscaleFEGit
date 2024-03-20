@@ -29,7 +29,7 @@ export function Footer() {
             <div className="flex items-center text-gray-900">
               <Logomark className="h-10 w-10 flex-none fill-cyan-500 rotate-180"/>
               <div className="ml-4">
-                <p className="text-base font-semibold">ODpayscale</p>
+                <p className="text-m text-base">ODpayscale</p>
                 <p className="mt-1 text-sm">Advocating pay transparency.</p>
               </div>
             </div>

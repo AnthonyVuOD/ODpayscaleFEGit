@@ -28,8 +28,8 @@ import { FormattingRenders } from '@/components/FormattingRenders';
     const {patientsPerWeekFormatted} = FormattingRenders();
     const {dailyHoursFormatted} = FormattingRenders();
     const {weeklyHoursFormatted} = FormattingRenders();
-    // const {retirementBenefitsFormatted} = FormattingRenders();
-    // const {patientsPerHourFormatted} = FormattingRenders();
+    const {retirementBenefitsFormatted} = FormattingRenders();
+    const {patientsPerHourFormatted} = FormattingRenders();
     
 
   // ///////////// Row Expansion//////////////////
@@ -90,7 +90,7 @@ import { FormattingRenders } from '@/components/FormattingRenders';
                 {rowData.dailyRateAndBonus!=null && (<p>Annualized Daily Pay <em>({dailyRateAndBonusFormatted(rowData)})</em></p>)}
                 {rowData.annualSalaryAndBonus!=null && (<p>Annual Salary and Bonus</p>)}
                 <p>Health Insurance Value</p>
-                {/* <p>Retirement Benefits Value</p> */}
+                <p>Retirement Benefits Value</p>
                 <p>Other Benefits Value</p>
                 <p>{paidDaysOffFormatted(rowData)} Days PTO Value</p>
                 <hr style={{ borderTop: '1px solid gray', margin: '2px 0'  }}/>
@@ -103,7 +103,7 @@ import { FormattingRenders } from '@/components/FormattingRenders';
                 {rowData.dailyRateAndBonus!=null && (<p>{annualizedDailyRateAndBonusFormatted(rowData)}</p>)}
                 {rowData.annualSalaryAndBonus!=null && (<p>{annualSalaryAndBonusFormatted(rowData)}</p>)}
                 <p>{healthInsuranceFormatted(rowData)}</p>
-                {/* <p>{retirementBenefitsFormatted(rowData)}</p> */}
+                <p>{retirementBenefitsFormatted(rowData)}</p>
                 <p>{otherBenefitsFormatted(rowData)}</p>
                 <p>{paidDaysOffValueFormatted(rowData)}</p>
                 <hr style={{ borderTop: '1px solid gray', margin: '2px 0'  }}/>
@@ -117,7 +117,7 @@ import { FormattingRenders } from '@/components/FormattingRenders';
                 {rowData.patientsPerWeek!=null && (<p>Patients/Week</p>)}
                 {rowData.dailyHours!=null && (<p>Work Hours/Day</p>)}
                 {rowData.weeklyHours!=null && (<p>Work Hours/Week</p>)}
-                {/* <p>Patients/Hour</p> */}
+                <p>Patients/Hour</p>
                 <p>Total Comp/Patient</p>
                 <p>Total Comp/Hour</p>
               </dt>
@@ -129,7 +129,7 @@ import { FormattingRenders } from '@/components/FormattingRenders';
                 {rowData.patientsPerWeek!=null && (<p>{patientsPerWeekFormatted(rowData)}</p>)}
                 {rowData.dailyHours!=null && (<p>{dailyHoursFormatted(rowData)}</p>)}
                 {rowData.weeklyHours!=null && (<p>{weeklyHoursFormatted(rowData)}</p>)}
-                {/* <p>{patientsPerHourFormatted(rowData)}</p> */}
+                <p>{patientsPerHourFormatted(rowData)}</p>
                 <p>{compPerPatientFormatted(rowData)}</p>
                 <p>{compPerHourFormatted(rowData)}</p>
               </dd>

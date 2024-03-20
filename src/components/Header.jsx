@@ -56,7 +56,7 @@ export function Header() {
               {/* <Logo className="h-10 w-auto" /> */}
               <Logomark className="h-10 w-10 flex-none fill-cyan-500 rotate-180" />
             {/* </Link> */}
-            <p className='-ml-12 text-m'>ODpayscale</p>
+            <p className='-ml-12 text-m text-base'>ODpayscale</p>
             <div className="hidden lg:flex lg:gap-10">
               <NavLinks />
             </div>

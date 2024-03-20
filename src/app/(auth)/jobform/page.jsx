@@ -60,8 +60,13 @@ export default function JobForm (){
       getUserData(); 
     },[])
 
-
-
+    ///this assigns "userId" to "OptometristId" whenever "userId"  changes////
+    useEffect(() => {
+        setW2FormDataSend(prevW2FormDataSend => ({
+        ...prevW2FormDataSend,
+        optometristId: userId 
+        }));
+    }, [userId]);
 
 
 
@@ -76,6 +81,7 @@ export default function JobForm (){
         "setting" : "Urban",
         "paidDaysOff" : '',
         "healthInsuranceValue" : '',
+        "retirementBenefitsValue" : '',
         "otherBenefitsValue" : '',
         "comments": '',
         "dailyRateAndBonus": '',
@@ -92,6 +98,7 @@ export default function JobForm (){
         "setting" : "Urban",
         "paidDaysOff" : '0',
         "healthInsuranceValue" : '0',
+        "retirementBenefitsValue" : '0',
         "otherBenefitsValue" : '0',
         "comments": '',
         "dailyRateAndBonus": '0',
@@ -112,7 +119,7 @@ export default function JobForm (){
 
         let formattedValue;
 
-        if(name === 'healthInsuranceValue'||name === 'dailyRateAndBonus'||name === 'otherBenefitsValue') {
+        if(name === 'healthInsuranceValue'||name === 'dailyRateAndBonus'||name === 'retirementBenefitsValue'||name === 'otherBenefitsValue') {
           formattedValue = formatCurrency(value);
         }
         else if (name === 'paidDaysOff'||name === 'dailyHours'||name === 'patientsPerDay') {
@@ -134,7 +141,7 @@ export default function JobForm (){
         setContractorFormDataSend({ 
             ...contractorFormDataSend,
             // [name]: (name === 'healthInsuranceValue'||name === 'dailyRateAndBonus'||name === 'otherBenefitsValue') ? removeNonNumericCharacters(value) : value,
-            [name]: (name === 'healthInsuranceValue'||name === 'dailyRateAndBonus'||name === 'otherBenefitsValue'||name === 'year')||name === 'paidDaysOff'||name === 'dailyHours'||name === 'patientsPerDay' ? nullToZero(removeNonNumericCharacters(value)) : value,
+            [name]: (name === 'healthInsuranceValue'||name === 'dailyRateAndBonus'||name === 'retirementBenefitsValue'||name === 'otherBenefitsValue'||name === 'year')||name === 'paidDaysOff'||name === 'dailyHours'||name === 'patientsPerDay' ? nullToZero(removeNonNumericCharacters(value)) : value,
 
             
         });
@@ -186,6 +193,7 @@ export default function JobForm (){
         "setting" : "Urban",
         "paidDaysOff" : '',
         "healthInsuranceValue" : '',
+        "retirementBenefitsValue" : '',
         "otherBenefitsValue" : '',
         "comments": '',
         "annualSalaryAndBonus": '',
@@ -202,20 +210,13 @@ export default function JobForm (){
         "setting" : "Urban",
         "paidDaysOff" : '0',
         "healthInsuranceValue" : '0',
+        "retirementBenefitsValue" : '0',
         "otherBenefitsValue" : '0',
         "comments": '',
         "annualSalaryAndBonus": '0',
         "weeklyHours": '0',
         "patientsPerWeek": '0'
       });
-
-    ///this assigns "userId" to "OptometristId" whenever "userId"  changes////
-    useEffect(() => {
-        setW2FormDataSend(prevW2FormDataSend => ({
-        ...prevW2FormDataSend,
-        optometristId: userId 
-        }));
-    }, [userId]);
     
     function onW2InputChange(e){
         const { name, value } = e.target;
@@ -224,7 +225,7 @@ export default function JobForm (){
 
         let formattedValue;
 
-        if(name === 'healthInsuranceValue'||name === 'annualSalaryAndBonus'||name === 'otherBenefitsValue') {
+        if(name === 'healthInsuranceValue'||name === 'annualSalaryAndBonus'||name === 'retirementBenefitsValue'||name === 'otherBenefitsValue') {
           formattedValue = formatCurrency(value);
         }
         else if (name === 'paidDaysOff'||name === 'weeklyHours'||name === 'patientsPerWeek') {
@@ -246,7 +247,7 @@ export default function JobForm (){
         setW2FormDataSend({ 
             ...w2FormDataSend,
             // [name]: (name === 'healthInsuranceValue'||name === 'annualSalaryAndBonus'||name === 'otherBenefitsValue') ? removeNonNumericCharacters(value) : value,
-            [name]: (name === 'healthInsuranceValue'||name === 'annualSalaryAndBonus'||name === 'otherBenefitsValue'||name === 'year')||name === 'paidDaysOff'||name === 'weeklyHours'||name === 'patientsPerWeek' ? nullToZero(removeNonNumericCharacters(value)) : value,
+            [name]: (name === 'healthInsuranceValue'||name === 'annualSalaryAndBonus'||name === 'retirementBenefitsValue'||name === 'otherBenefitsValue'||name === 'year')||name === 'paidDaysOff'||name === 'weeklyHours'||name === 'patientsPerWeek' ? nullToZero(removeNonNumericCharacters(value)) : value,
 
         });
         console.log(w2FormDataSend)
@@ -538,8 +539,25 @@ export default function JobForm (){
                                         </div>
 
                                         <div className="sm:col-span-4">
+                                            <label htmlFor="retirementBenefitsValue" className="block text-sm font-medium leading-6 text-gray-900">
+                                                Estimated employer annual contribution to retirement:
+                                            </label>
+                                            <div className="mt-2">
+                                                <input
+                                                type="text"
+                                                name="retirementBenefitsValue"
+                                                id="retirementBenefitsValue"
+                                                value={w2FormData.retirementBenefitsValue}
+                                                onChange={onW2InputChange}
+                                                placeholder='$'
+                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="sm:col-span-4">
                                             <label htmlFor="otherBenefitsValue" className="block text-sm font-medium leading-6 text-gray-900">
-                                                Estimated employer annual contribution to other benefits (Retirement, Licensure, CE, malpractice, dues, etc.):
+                                                Estimated employer annual contribution to other benefits (Licensure, CE, malpractice, dues, etc.):
                                             </label>
                                             <div className="mt-2">
                                                 <input
@@ -572,7 +590,7 @@ export default function JobForm (){
 
                                         <div className="sm:col-span-4">
                                             <label htmlFor="weeklyHours" className="block text-sm font-medium leading-6 text-gray-900">
-                                                Hours worked per week:
+                                                Hours worked per week (Please do not include lunch):
                                             </label>
                                             <div className="mt-2">
                                                 <input
@@ -872,8 +890,25 @@ export default function JobForm (){
                                         </div>
 
                                         <div className="sm:col-span-4">
+                                            <label htmlFor="retirementBenefitsValue" className="block text-sm font-medium leading-6 text-gray-900">
+                                                Estimated employer annual contribution to retirement:
+                                            </label>
+                                            <div className="mt-2">
+                                                <input
+                                                type="text"
+                                                name="retirementBenefitsValue"
+                                                id="retirementBenefitsValue"
+                                                placeholder='$'
+                                                value={contractorFormData.retirementBenefitsValue}
+                                                onChange={onContractorInputChange}
+                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="sm:col-span-4">
                                             <label htmlFor="otherBenefitsValue" className="block text-sm font-medium leading-6 text-gray-900">
-                                                Estimated employer annual contribution to other benefits (Retirement, Licensure, CE, malpractice, dues, etc.):
+                                                Estimated employer annual contribution to other benefits (Licensure, CE, malpractice, dues, etc.):
                                             </label>
                                             <div className="mt-2">
                                                 <input
@@ -906,7 +941,7 @@ export default function JobForm (){
 
                                         <div className="sm:col-span-4">
                                             <label htmlFor="dailyHours" className="block text-sm font-medium leading-6 text-gray-900">
-                                                Hours worked per day:
+                                                Hours worked per day (Please do not include lunch):
                                             </label>
                                             <div className="mt-2">
                                                 <input
